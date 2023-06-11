@@ -9,10 +9,10 @@ import { onPageScroll, onReachBottom } from '@dcloudio/uni-app';
 import hmRecommend from './hm-recommend.vue';
 import { ref } from 'vue'
 
-const count = ref<number>(9);
+const count = ref<number>(10);
 
 onReachBottom(() => {
-    count.value = count.value + 9;
+    count.value = count.value + 10;
     
 });
 
@@ -30,7 +30,6 @@ page {
 
 .home {
     padding-bottom: 100rpx;
-
     .scroll {
         height: 700px;
     }
