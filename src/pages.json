@@ -1,0 +1,63 @@
+{
+	"easycom": {
+		"custom": {
+			"^u-(.*)": "uview-plus/components/u-$1/u-$1.vue"
+		}
+	},
+	"pages": [
+		{
+			"path": "pages/home/index",
+			"style": {
+				"navigationBarTitleText": "百度贴吧",
+				"onReachBottomDistance": 10
+			}
+		},
+		{
+			"path": "pages/enterTieba/index",
+			"style": {}
+		},
+		{
+			"path": "pages/user/index",
+			"style": {}
+		},
+		{
+			"path": "pages/message/index",
+			"style": {}
+		},
+		{
+			"path": "pages/user/login/login",
+			"style": {
+				"navigationBarBackgroundColor": "white"
+			}
+		}
+	],
+	"tabBar": {
+		"list": [
+			{
+				"text": "首页",
+				"pagePath": "pages/home/index"
+			},
+			{
+				"text": "进吧",
+				"pagePath": "pages/enterTieba/index"
+			},
+			{
+				"text": "消息",
+				"pagePath": "pages/message/index"
+			},
+			{
+				"text": "我的",
+				"pagePath": "pages/user/index"
+			}
+		],
+		"color": "black",
+		"backgroundColor": "#FFF",
+		"selectedColor": "blue",
+		"borderStyle": "white"
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}
