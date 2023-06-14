@@ -25,9 +25,9 @@
 			"style": {}
 		},
 		{
-			"path": "pages/user/login/login",
+			"path": "pages/user/login/index",
 			"style": {
-				"navigationBarBackgroundColor": "white"
+				"navigationStyle": "custom"
 			}
 		}
 	],
