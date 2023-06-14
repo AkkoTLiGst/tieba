@@ -13,7 +13,7 @@
             <text>{{ tiezi.content }}</text>
         </view>
 
-        <image v-if="tiezi.url" :src="tiezi.url" mode="widthFix"  :style="{ width:img.width + 'px'}"/>
+        <image v-if="tiezi.url" :src="tiezi.url" mode="widthFix" :style="{ width: img.width + 'px' }" />
 
         <view class="footer">
             <view>
@@ -57,7 +57,8 @@ const tiezi = reactive({
     time: '',
     star: 0,
     thumbUp: 0,
-    commentsNum: 0
+    commentsNum: 0,
+    tieziImg: ''
 })
 
 // 图片宽度
@@ -75,24 +76,21 @@ const showInfo = async () => {
     const getTieba: AnyObject = await tiebaById(id) as AnyObject;
     // console.log(getTieba);
     Object.assign(tiebas, getTieba.data)
-    tiebas.url = getTieba.url;
-
+    tiebas.url = `http://192.168.50.247:3000/tiebas/${getTieba.data.photoTieba}`;
 
     const getTiezi: AnyObject = await randomTieziTB(tiebas.id) as AnyObject;
-    // console.log(getTiezi);
     Object.assign(tiezi, getTiezi.data);
-    tiezi.url = getTiezi.url;
-    // console.log(tiezi);
 
+    if (getTiezi.data.tieziImg) {
+        tiezi.url = `http://192.168.50.247:3000/tiezi/${getTiezi.data.tieziImg}`;
 
-    // 获取原图宽度
-    if (tiezi.url) {
+        // 获取原图宽度
         uni.getImageInfo({
             src: tiezi.url,
             success: ({ width, height, path, orientation, type }) => {
                 // console.log(width, height, path, orientation, type);
                 img.width = width;
-             },
+            },
             fail: (error) => { }
         })
     }

@@ -1,7 +1,7 @@
 <template>
     <view class="userInfo">
         <view class="user">
-            <image class="useravatar" :src="`http://localhost:3000/user/${user.userInfo.photoUser}`"></image>
+            <image class="useravatar" :src="`http://192.168.50.247:3000/user/${user.userInfo.photoUser}`"></image>
             <view class="username">
                 <view class="username-top">
                     <text>{{ user.userInfo.username }}</text>
