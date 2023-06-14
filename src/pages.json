@@ -53,7 +53,8 @@
 		"color": "black",
 		"backgroundColor": "#FFF",
 		"selectedColor": "blue",
-		"borderStyle": "white"
+		"borderStyle": "white",
+		"fontSize": "13px"
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

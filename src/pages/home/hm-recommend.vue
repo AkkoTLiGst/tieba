@@ -17,15 +17,15 @@
 
         <view class="footer">
             <view>
-                <u-icon size="40rpx" name="star"></u-icon>
+                <u-icon size="45rpx" name="star"></u-icon>
                 <text>收藏</text>
             </view>
             <view>
-                <u-icon size="40rpx" name="chat"></u-icon>
+                <u-icon size="45rpx" name="chat"></u-icon>
                 <text>{{ tiezi.commentsNum }}</text>
             </view>
             <view>
-                <u-icon size="40rpx" name="thumb-up"></u-icon>
+                <u-icon size="45rpx" name="thumb-up"></u-icon>
                 <text>{{ tiezi.thumbUp }}</text>
             </view>
         </view>
@@ -173,7 +173,8 @@ showInfo();
     .footer {
         display: flex;
         justify-content: space-evenly;
-        font-size: 25rpx;
+        font-size: 26rpx;
+        margin-top: 10px;
 
         view {
             display: flex;

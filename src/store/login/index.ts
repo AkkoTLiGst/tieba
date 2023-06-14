@@ -18,17 +18,27 @@ export const loginStore = defineStore(
         }); // 用户信息
 
         // 更改登录状态
-        function setIsLogin(bool: boolean){
+        function setIsLogin(bool: boolean) {
             isLogin.value = bool;
         }
 
+        function clearUser() {
+            Object.assign(userInfo, {
+                username: '',
+                userId: '',
+                photoUser: '',
+                email: ''
+            });
+            isLogin.value = false;
+        }
+
         // 保存用户信息
-        async function setUserInfo(){
+        async function setUserInfo() {
             const data: loginTypes = await getUser() as loginTypes;
             Object.assign(userInfo, data);
         }
 
-        return { isLogin, userInfo, setIsLogin, setUserInfo }
+        return { isLogin, userInfo, setIsLogin, setUserInfo, clearUser }
     },
     {
         unistorage: true // 持久化
