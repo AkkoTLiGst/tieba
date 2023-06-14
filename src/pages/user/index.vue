@@ -8,25 +8,15 @@
 import { onTabItemTap } from '@dcloudio/uni-app';
 import { loginStore } from '@/store/login';
 import userInterface from '@/pages/user/userInterface/index.vue'
-import { getUser } from '@/server/login';
 
 const login = loginStore();
 
 
-
-const getData = async () => {
-    const data =  await getUser();
-    console.log(data);
-    
-    return data
-}
-
 // 如果能获得到loginKey，就代表已经登陆了
 if (uni.getStorageSync('loginKey')) {
-    login.isLogin = true; // 状态改为已登录
-    const data = getData();
+    login.setIsLogin(true); // 状态改为已登录
 }else{
-    login.isLogin = false;
+    login.setIsLogin(false);
 }
 
 onTabItemTap(() => {

@@ -1,14 +1,36 @@
 import { defineStore } from 'pinia'
 import { names } from '../storeName'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
+import type { loginTypes } from '@/types/types';
+import { getUser } from '@/server/login';
 
-export const loginStore = defineStore(names.Login, () => {
-    // 开启数据持久化
-    persist: true;
+export const loginStore = defineStore(
+    names.Login,
+    () => {
+        id: 'login'
+        // state
+        const isLogin = ref(false); // 是否登陆
+        const userInfo: loginTypes = reactive({
+            username: '',
+            userId: '',
+            photoUser: '',
+            email: ''
+        }); // 用户信息
 
-    // state
-    const isLogin = false; // 是否登陆
-    const userInfo = {}; // 用户信息
+        // 更改登录状态
+        function setIsLogin(bool: boolean){
+            isLogin.value = bool;
+        }
 
-    return { isLogin, userInfo }
-});
+        // 保存用户信息
+        async function setUserInfo(){
+            const data: loginTypes = await getUser() as loginTypes;
+            Object.assign(userInfo, data);
+        }
+
+        return { isLogin, userInfo, setIsLogin, setUserInfo }
+    },
+    {
+        unistorage: true // 持久化
+    }
+);

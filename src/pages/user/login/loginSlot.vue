@@ -55,6 +55,7 @@ import { ref, reactive } from 'vue'
 import { throttle, isEmail, isMobile } from '@/hooks/index'
 import { inject } from 'vue';
 import { login, getUser } from '@/server/login';
+import type { loginTypes } from '@/types/types';
 
 // 输入框和按钮样式
 const inputStyle = {
@@ -173,9 +174,9 @@ const loginBtn = async () => {
 
     try {
         uni.setStorageSync('loginKey', data.token);
-        // 用户信息存储到pinia
-        const userInfo = await getUser() as Object;
-        user.userInfo = userInfo;
+        user.setUserInfo(); // 用户信息存储到pinia
+        user.setIsLogin(true); // 登录状态为true
+        
 
         uni.switchTab({
             url: '/pages/user/index'
