@@ -153,6 +153,7 @@ const argeeArgeement = (argee: boolean) => {
     isShowPop.value = false
 }
 
+const user = loginStore();
 
 // 登录事件
 const loginBtn = async () => {
@@ -171,7 +172,14 @@ const loginBtn = async () => {
     const data = await login(username, passwordVal.value) as AnyObject;
 
     try {
-        uni.setStorageSync('loginKey', data.token)
+        uni.setStorageSync('loginKey', data.token);
+        // 用户信息存储到pinia
+        const userInfo = await getUser() as Object;
+        user.userInfo = userInfo;
+
+        uni.switchTab({
+            url: '/pages/user/index'
+        });
     } catch (error) {
         console.log(error);
     }
