@@ -1,15 +1,18 @@
 <template>
     <view class="home">
-        <hm-recommend v-for="i in count"></hm-recommend>
+        <postsVue v-for="i in count" :item="1"/>
     </view>
 </template>
 
 <script setup lang="ts">
 import { onPageScroll, onReachBottom } from '@dcloudio/uni-app';
-import hmRecommend from './hm-recommend.vue';
-import { ref } from 'vue'
+import postsVue from '@/components/posts.vue'
+import { ref, provide } from 'vue'
 
 const count = ref<number>(10);
+const from = 'home';
+
+provide('from', from)
 
 onReachBottom(() => {
     count.value = count.value + 10;

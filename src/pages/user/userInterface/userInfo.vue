@@ -1,7 +1,7 @@
 <template>
     <view class="userInfo">
         <view class="user">
-            <image class="useravatar" :src="`http://192.168.50.247:3000/user/${user.userInfo.photoUser}`"></image>
+            <image class="useravatar" :src="`http://localhost:3000/user/${user.userInfo.photoUser}`"></image>
             <view class="username">
                 <view class="username-top">
                     <text>{{ user.userInfo.username }}</text>
@@ -11,25 +11,25 @@
             </view>
         </view>
         <view class="items">
-            <view>
+            <view @click="myPosts">
                 <u-icon name="file-text" color="#63bcff" size="30px"></u-icon>
                 <text>我的帖子</text>
             </view>
-            <u-icon name="arrow-right" bold="true"></u-icon>
+            <u-icon name="arrow-right" :bold="true"></u-icon>
         </view>
         <view class="items">
             <view>
                 <u-icon name="star" color="#fb70a1" size="30px"></u-icon>
                 <text>我的收藏</text>
             </view>
-            <u-icon name="arrow-right" bold="true"></u-icon>
+            <u-icon name="arrow-right" :bold="true"></u-icon>
         </view>
         <view class="items">
             <view>
                 <u-icon name="warning" color="#fac46b" size="30px"></u-icon>
                 <text>投诉反馈</text>
             </view>
-            <u-icon name="arrow-right" bold="true"></u-icon>
+            <u-icon name="arrow-right" :bold="true"></u-icon>
         </view>
     </view>
 </template>
@@ -42,12 +42,22 @@ import { reactive } from 'vue';
 
 const user = loginStore();
 
+// 设置三方图标
 const unicodeIcon = reactive({
     sex: {
         icon: '\ue601',
         color: 'color: #8150ff'
     }
 })
+
+const myPosts = () => {
+    user.setUserInfo();
+    user.updateTieziID();
+    
+    uni.navigateTo({
+        url: '/pages/user/myPosts/index'
+    });
+}
 
 
 </script>

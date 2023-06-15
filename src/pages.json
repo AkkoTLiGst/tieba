@@ -8,7 +8,6 @@
 		{
 			"path": "pages/home/index",
 			"style": {
-				"navigationBarTitleText": "百度贴吧",
 				"onReachBottomDistance": 10
 			}
 		},
@@ -28,6 +27,12 @@
 			"path": "pages/user/login/index",
 			"style": {
 				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/user/myPosts/index",
+			"style": {
+				"navigationBarTitleText": "我的帖子"
 			}
 		}
 	],

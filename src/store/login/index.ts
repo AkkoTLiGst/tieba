@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { names } from '../storeName'
 import { reactive, ref } from 'vue'
 import type { loginTypes } from '@/types/types';
-import { getUser } from '@/server/login';
+import { getTokenTiezi, getUser } from '@/server/login';
 
 export const loginStore = defineStore(
     names.Login,
@@ -14,7 +14,8 @@ export const loginStore = defineStore(
             username: '',
             userId: '',
             photoUser: '',
-            email: ''
+            email: '',
+            tiezisID: []
         }); // 用户信息
 
         // 更改登录状态
@@ -27,7 +28,8 @@ export const loginStore = defineStore(
                 username: '',
                 userId: '',
                 photoUser: '',
-                email: ''
+                email: '',
+                tiezisID: []
             });
             isLogin.value = false;
         }
@@ -38,7 +40,14 @@ export const loginStore = defineStore(
             Object.assign(userInfo, data);
         }
 
-        return { isLogin, userInfo, setIsLogin, setUserInfo, clearUser }
+
+        // 获取用户的所有帖子的ID
+        async function updateTieziID() {
+            const arr: number[] = await getTokenTiezi() as number[];
+            userInfo.tiezisID = arr.reverse(); // reverse倒序输出数组
+        }
+
+        return { isLogin, userInfo, setIsLogin, setUserInfo, clearUser, updateTieziID }
     },
     {
         unistorage: true // 持久化
