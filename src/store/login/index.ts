@@ -10,8 +10,11 @@ export const loginStore = defineStore(
         id: 'login'
         // state
         const isLogin = ref(false); // 是否登陆
+
+        // 用户信息
         const userInfo: loginTypes = reactive({
             username: '',
+            id: 0,
             userId: '',
             photoUser: '',
             email: '',
@@ -26,6 +29,7 @@ export const loginStore = defineStore(
         function clearUser() {
             Object.assign(userInfo, {
                 username: '',
+                id: 0,
                 userId: '',
                 photoUser: '',
                 email: '',

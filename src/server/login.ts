@@ -29,3 +29,25 @@ export const getTokenTiezi = () => {
         timeout: 5000
     }).then(res => res.data);
 }
+
+// 通过帖子ID和用户ID点赞
+export const likePost = (user_id: number, post_id: number, code: string) => {
+    return uni.request({
+        url: '/api/auth/authLike',
+        method: 'PUT',
+        data: {post_id, user_id, code},
+        header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
+        timeout: 5000
+    }).then(res => res.data)
+}
+
+// 通过用户ID和帖子ID返回是否点赞
+export const isLike = (user_id: number, post_id: number) => {
+    return uni.request({
+        url: '/api/auth/authIsLike',
+        method: 'GET',
+        data: { user_id, post_id },
+        header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
+        timeout: 5000
+    }).then(res => res.data);
+}

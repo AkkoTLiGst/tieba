@@ -24,23 +24,44 @@
                 <u-icon size="45rpx" name="chat"></u-icon>
                 <text>{{ tiezi.commentsNum }}</text>
             </view>
-            <view>
+            <view @click="like" v-if="!userIsLike">
                 <u-icon size="45rpx" name="thumb-up"></u-icon>
                 <text>{{ tiezi.thumbUp }}</text>
             </view>
+            <view @click="like" v-if="userIsLike">
+                <u-icon size="45rpx" name="thumb-up" :color="'red'"></u-icon>
+                <text>{{ tiezi.thumbUp }}</text>
+            </view>
         </view>
+
+        <u-popup :show="isShowPop" mode="center" @close="closePopup"
+            :overlayStyle="{ backgroundColor: 'rgba(128,128,128, .1)' }">
+            <view class="popup">
+                <image mode="aspectFit" src="http://localhost:3000/img_popup.png"></image>
+                <text>继续操作需要登录贴吧账号</text>
+                <text @click="userLoginEvent">立即登录</text>
+                <u-button type="primary">打开APP</u-button>
+            </view>
+        </u-popup>
     </view>
 </template>
 
 <script setup lang="ts">
 import { tiebaById, tiebaCount } from '@/server/tiebas';
 import { randomTieziTB, getTieziById } from '@/server/tiezi';
-import { reactive, inject } from 'vue';
+import { isLike, likePost } from '@/server/login'
+import { reactive, inject, ref } from 'vue';
 import type { tiezis } from '@/types/types'
+import { loginStore } from '@/store/login';
+import { onShow } from '@dcloudio/uni-app';
+
+const user = loginStore(); // 用户信息
 
 const from = inject('from'); // 从哪里来
 
 const props = defineProps<{ item: number }>();
+
+const isShowPop = ref(false);
 
 // 用于页面
 // 贴吧
@@ -53,8 +74,11 @@ const tiebas = reactive({
 
 });
 
+const userIsLike = ref(false);
+
 // 帖子
 const tiezi = reactive({
+    id: 0,
     threadTitle: '',
     content: '',
     url: '',
@@ -84,6 +108,12 @@ const fromHome = async () => {
     const getTiezi = await randomTieziTB(tiebas.id) as AnyObject;
     Object.assign(tiezi, getTiezi);
 
+    if (user.isLogin) {
+        // 判断是否点赞
+        const isLikeData = await isLike(user.userInfo.id, tiezi.id) as AnyObject;
+        userIsLike.value = isLikeData.isLike;
+    }
+
     return getTiezi;
 }
 
@@ -99,11 +129,37 @@ const fromUser = async () => {
     Object.assign(tiebas, getTieba)
     tiebas.url = `http://localhost:3000/tiebas/${getTieba.photoTieba}`;
 
+    // 判断是否点赞
+    const isLikeData = await isLike(user.userInfo.id, tiezi.id) as AnyObject;
+    userIsLike.value = isLikeData.isLike;
+
     return getTiezi;
-    
+
+
 }
 
 
+// 实现点赞
+const like = async () => {
+
+    if (user.isLogin) {
+        if (userIsLike.value === false) {
+            const a = await likePost(user.userInfo.id, tiezi.id, 'like');
+
+            const getTiezi: tiezis = await getTieziById(tiezi.id) as tiezis;
+            Object.assign(tiezi, getTiezi);
+            userIsLike.value = true;
+        } else {
+            const a = await likePost(user.userInfo.id, tiezi.id, 'unlike');
+
+            const getTiezi: tiezis = await getTieziById(tiezi.id) as tiezis;
+            Object.assign(tiezi, getTiezi);
+            userIsLike.value = false;
+        }
+    } else {
+        isShowPop.value = true;
+    }
+}
 
 // 初始化贴吧信息
 const showInfo = async () => {
@@ -150,6 +206,24 @@ const showInfo = async () => {
 
 }
 showInfo();
+
+onShow(() => {
+
+})
+
+// 遮罩层相关
+// 关闭遮罩层
+const closePopup = () => {
+    isShowPop.value = false;
+}
+// 切换至登录界面
+const userLoginEvent = () => {
+    uni.navigateTo({
+        url: '/pages/user/login/index'
+    });
+}
+
+
 </script>
 
 <style scoped lang="scss">
@@ -159,6 +233,35 @@ showInfo();
     padding: 20rpx;
     overflow: hidden;
     margin-bottom: 20rpx;
+
+    :deep(.u-popup__content) {
+        width: 50%;
+        padding: 20px 30px;
+        border-radius: 20rpx;
+    }
+
+    .popup {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        font-size: 27rpx;
+
+        text {
+            margin-top: 10px;
+        }
+
+        text:nth-child(3) {
+            font-size: 23rpx;
+            color: gray;
+            margin-bottom: 10px;
+        }
+
+        image {
+            width: 300rpx;
+            height: 300rpx;
+        }
+
+    }
 
     .top {
         display: flex;

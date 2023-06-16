@@ -10,8 +10,8 @@
                 <text class="introduction">暂无简介</text>
             </view>
         </view>
-        <view class="items">
-            <view @click="myPosts">
+        <view class="items" @click="myPosts">
+            <view>
                 <u-icon name="file-text" color="#63bcff" size="30px"></u-icon>
                 <text>我的帖子</text>
             </view>
@@ -53,7 +53,7 @@ const unicodeIcon = reactive({
 const myPosts = () => {
     user.setUserInfo();
     user.updateTieziID();
-    
+
     uni.navigateTo({
         url: '/pages/user/myPosts/index'
     });

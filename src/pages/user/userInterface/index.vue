@@ -21,12 +21,12 @@ const btnStyle = {
 
 const logOut = () => {
     console.log(1);
-    
+
     uni.setStorageSync('loginKey', '');
     user.clearUser();
-    uni.switchTab({
-        url:'/pages/home/index',
-    })
+    uni.reLaunch({
+        url: '/pages/home/index'
+    });
 }
 
 </script>

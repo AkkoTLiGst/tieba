@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { onTabItemTap } from '@dcloudio/uni-app';
+import {  onShow } from '@dcloudio/uni-app';
 import { loginStore } from '@/store/login';
 import userInterface from '@/pages/user/userInterface/index.vue'
 
@@ -19,11 +19,11 @@ if (uni.getStorageSync('loginKey')) {
     login.setIsLogin(false);
 }
 
-onTabItemTap(() => {
+onShow(() => {
     // 没有登陆就跳转到登陆界面
     if (login.isLogin === false) {
         uni.navigateTo({
-            url: 'login/index',
+            url: 'login/index?name=user',
         })
     }
 

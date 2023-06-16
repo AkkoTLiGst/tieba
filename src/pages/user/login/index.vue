@@ -2,7 +2,7 @@
     <view class="login">
         <view class="lg-img"></view>
 
-        <view class="lg-bar" :style="{ height: statusBarHeight + 'px' }">
+        <view class="lg-bar" :style="{ height: statusBarHeight + 'px' }" @click="rollBack">
             <u-icon name="arrow-left" size="20" color="white"></u-icon>
         </view>
 
@@ -15,15 +15,29 @@
 </template>
 
 <script setup lang="ts">
-import { onLoad } from '@dcloudio/uni-app';
+import { onLoad, onShow } from '@dcloudio/uni-app';
 import login from './login.vue';
 import { ref } from 'vue'
 
 const statusBarHeight = ref(0);
+let from = '';
 
-onLoad(() => {
+onLoad((e) => {
     statusBarHeight.value = uni.getSystemInfoSync().statusBarHeight as number || 44;
-})
+    from = e!.name;
+});
+
+const rollBack = () => {
+    if (from === 'user') {
+        uni.switchTab({
+            url: '/pages/home/index'
+        })
+    }else{
+        uni.navigateBack({
+            delta: 1,
+        })
+    }
+}
 
 </script>
 

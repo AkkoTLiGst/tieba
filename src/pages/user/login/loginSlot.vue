@@ -178,7 +178,7 @@ const loginBtn = async () => {
         user.setIsLogin(true); // 登录状态为true
         
 
-        uni.switchTab({
+        uni.reLaunch({
             url: '/pages/user/index'
         });
     } catch (error) {

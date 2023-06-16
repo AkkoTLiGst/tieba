@@ -3,7 +3,6 @@
         <postsVue v-for="(item, index) in list" :index="index" :item="item" />
         <u-alert class="alert" :title="'您没帖子'" v-if="!tieziidLength" :center="true" type="primary"></u-alert>
     </view>
-    
 </template>
 
 <script setup lang="ts">

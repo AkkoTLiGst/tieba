@@ -1,6 +1,7 @@
 // 用户信息
 export type loginTypes = {
     username: string,
+    id: number,
     userId: string,
     photoUser: string,
     email: string,

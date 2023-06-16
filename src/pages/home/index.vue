@@ -1,11 +1,11 @@
 <template>
     <view class="home">
-        <postsVue v-for="i in count" :item="1"/>
+        <postsVue v-for="i in count" :item="1" />
     </view>
 </template>
 
 <script setup lang="ts">
-import { onPageScroll, onReachBottom } from '@dcloudio/uni-app';
+import { onPageScroll, onReachBottom, onLoad, onShow } from '@dcloudio/uni-app';
 import postsVue from '@/components/posts.vue'
 import { ref, provide } from 'vue'
 
@@ -16,12 +16,9 @@ provide('from', from)
 
 onReachBottom(() => {
     count.value = count.value + 10;
-    
+
 });
 
-const init = async () => {
-}
-init();
 </script>
 
 <style scoped lang="scss">
@@ -33,6 +30,7 @@ page {
 
 .home {
     padding-bottom: 100rpx;
+
     .scroll {
         height: 700px;
     }
