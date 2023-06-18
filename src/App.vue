@@ -12,7 +12,8 @@ onHide(() => {
 </script>
 <style lang="scss">
 @import "uview-plus/index.scss";
-.uni-tabbar{
+
+.uni-tabbar {
   background-color: white !important;
   border-top: 1px solid rgba($color: #808080, $alpha: .1) !important;
   // border-color: rgba($color: #808080, $alpha: .6) !important;

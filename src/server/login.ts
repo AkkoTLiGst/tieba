@@ -51,3 +51,14 @@ export const isLike = (user_id: number, post_id: number) => {
         timeout: 5000
     }).then(res => res.data);
 }
+
+// 通过ID获取关注的贴吧
+export const followTieba = (user_id: number) => {
+    return uni.request({
+        url: '/api/auth/authUserTieba',
+        method: 'GET',
+        data: { user_id},
+        header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
+        timeout: 5000
+    }).then(res => res.data);
+}

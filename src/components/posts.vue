@@ -17,19 +17,19 @@
 
         <view class="footer">
             <view>
-                <u-icon size="45rpx" name="star"></u-icon>
+                <u-icon size="24px" name="star"></u-icon>
                 <text>收藏</text>
             </view>
             <view>
-                <u-icon size="45rpx" name="chat"></u-icon>
+                <u-icon size="24px" name="chat"></u-icon>
                 <text>{{ tiezi.commentsNum }}</text>
             </view>
             <view @click="like" v-if="!userIsLike">
-                <u-icon size="45rpx" name="thumb-up"></u-icon>
+                <u-icon size="24px" name="thumb-up"></u-icon>
                 <text>{{ tiezi.thumbUp }}</text>
             </view>
             <view @click="like" v-if="userIsLike">
-                <u-icon size="45rpx" name="thumb-up" :color="'red'"></u-icon>
+                <u-icon size="24px" name="thumb-up" :color="'red'"></u-icon>
                 <text>{{ tiezi.thumbUp }}</text>
             </view>
         </view>
@@ -230,9 +230,9 @@ const userLoginEvent = () => {
 .hm-recommend {
     background-color: white;
     border-radius: 20rpx;
-    padding: 20rpx;
+    padding: 10px;
     overflow: hidden;
-    margin-bottom: 20rpx;
+    margin-bottom: 10px;
 
     :deep(.u-popup__content) {
         width: 50%;
@@ -244,21 +244,21 @@ const userLoginEvent = () => {
         display: flex;
         align-items: center;
         flex-direction: column;
-        font-size: 27rpx;
+        font-size: 16px;
 
         text {
             margin-top: 10px;
         }
 
         text:nth-child(3) {
-            font-size: 23rpx;
+            font-size: 14px;
             color: gray;
             margin-bottom: 10px;
         }
 
         image {
-            width: 300rpx;
-            height: 300rpx;
+            width: 200px;
+            height: 200px;
         }
 
     }
@@ -268,10 +268,10 @@ const userLoginEvent = () => {
         align-items: center;
 
         image {
-            width: 64rpx;
-            height: 64rpx;
-            border-radius: 20rpx;
-            margin-right: 5rpx;
+            width: 35px;
+            height: 35px;
+            border-radius: 35px;
+            margin-right: 5px;
         }
 
         view {
@@ -280,30 +280,31 @@ const userLoginEvent = () => {
             justify-content: center;
 
             text:first-child {
-                font-size: 30rpx;
+                font-size: 17px;
             }
 
             text:last-child {
-                font-size: 20rpx;
+                font-size: 12px;
                 color: rgba($color: #000000, $alpha: .4);
             }
         }
     }
 
     .center {
-        margin: 5rpx 0;
+        margin: 5px 0;
 
         text {
             display: flex;
         }
 
         text:first-child {
-            font-size: 30rpx;
+            font-size: 16px;
             font-weight: bold;
         }
 
         text:last-child {
-            font-size: 27rpx;
+            margin-top: 5px;
+            font-size: 14px;
         }
     }
 
@@ -315,7 +316,7 @@ const userLoginEvent = () => {
     .footer {
         display: flex;
         justify-content: space-evenly;
-        font-size: 26rpx;
+        font-size: 13px;
         margin-top: 10px;
 
         view {
@@ -323,7 +324,7 @@ const userLoginEvent = () => {
             align-items: center;
 
             text {
-                margin-left: 2rpx;
+                margin-left: 2px;
             }
         }
     }

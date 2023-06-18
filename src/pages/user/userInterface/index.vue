@@ -33,7 +33,6 @@ const logOut = () => {
 
 <style scoped lang="scss">
 .userInterface {
-    max-width: 624px;
     margin: 0 auto;
 
     .btnStyle {

@@ -65,6 +65,7 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8",
-		"navigationBarTitleText": "百度贴吧"
+		"navigationBarTitleText": "百度贴吧",
+		"maxWidth": 624
 	}
 }
