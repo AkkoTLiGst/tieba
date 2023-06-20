@@ -34,10 +34,7 @@ const num = ref(0); // 控制显示个数
 
 const initFollows = async () => {
     const data = await followTieba(user.userInfo.id) as objArr[];
-    followArr.push(...data);
-    console.log(followArr);
-    
-
+    followArr.push(...data);   
 
     if (followArr.length > 16) {
         num.value = 16;

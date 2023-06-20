@@ -8,6 +8,7 @@
 export function throttle<T>(fn: T, deply = 500, config: { first?: boolean, end?: boolean } = { first: true, end: false }): T{
     let timer: boolean = true;
     
+    
     if(typeof fn !== 'function'){
         throw new TypeError('类型错误，传入的不是一个函数');
     }
@@ -30,8 +31,8 @@ export function throttle<T>(fn: T, deply = 500, config: { first?: boolean, end?:
 }
 
 /**
- * 函数防抖
- * @param fn 防抖方法
+ * 函数节流
+ * @param fn 节流方法
  * @param time 间隔时间
  * @param config 配置 {first：首次点击是否执行 end：时间结束后是否执行}
  * @returns 

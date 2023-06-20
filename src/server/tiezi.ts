@@ -11,7 +11,8 @@ export const randomTieziTB = (tiebaId: number) => {
 export const getTieziById = (tieziID: number) => {
     return uni.request({
         url: `/api/tiezi/getTieziById`,
-        data: {tieziID},
+        data: { tieziID },
         timeout: 5000
     }).then(res => res.data);
 }
+

@@ -21,3 +21,17 @@ export type tiezis = {
     createrId: number,
     ctieBaId: number
 }
+
+// 传输给详情页的信息
+export type toDetailPage = {
+    createrId: number, // 发帖人ID
+    tiebaName: string, // 对应贴吧名
+    tiebaImg: string, // 贴吧头像
+    thumbUp: number, // 点赞数
+    tieziId: number, // 帖子ID
+    createTime: string, // 发帖时间
+    content: string, // 内容
+    title: string, // 标题
+    commentsNum: number, // 评论数量
+    url: string // 图片
+}

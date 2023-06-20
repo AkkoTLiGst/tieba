@@ -34,6 +34,12 @@
 			"style": {
 				"navigationBarTitleText": "我的帖子"
 			}
+		},
+		{
+			"path": "components/postDetailPage",
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"tabBar": {

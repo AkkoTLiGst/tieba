@@ -8,19 +8,19 @@
             </view>
         </view>
 
-        <view class="center">
+        <view class="center" @click="detailPage">
             <text>{{ tiezi.threadTitle }}</text>
             <text>{{ tiezi.content }}</text>
         </view>
 
-        <image v-if="tiezi.url" :src="tiezi.url" mode="widthFix" :style="{ width: img.width + 'px' }" />
+        <image @click="detailPage" v-if="tiezi.url" :src="tiezi.url" mode="widthFix" :style="{ width: img.width + 'px' }" />
 
         <view class="footer">
-            <view>
+            <view @click="collection">
                 <u-icon size="24px" name="star"></u-icon>
                 <text>收藏</text>
             </view>
-            <view>
+            <view @click="detailPage">
                 <u-icon size="24px" name="chat"></u-icon>
                 <text>{{ tiezi.commentsNum }}</text>
             </view>
@@ -50,8 +50,8 @@
 import { tiebaById, tiebaCount } from '@/server/tiebas';
 import { randomTieziTB, getTieziById } from '@/server/tiezi';
 import { isLike, likePost } from '@/server/login'
-import { reactive, inject, ref } from 'vue';
-import type { tiezis } from '@/types/types'
+import { reactive, inject, ref, provide } from 'vue';
+import type { tiezis, toDetailPage } from '@/types/types'
 import { loginStore } from '@/store/login';
 import { onShow } from '@dcloudio/uni-app';
 
@@ -87,13 +87,29 @@ const tiezi = reactive({
     star: 0,
     thumbUp: 0,
     commentsNum: 0,
-    tieziImg: ''
+    tieziImg: '',
+    createrId: 0
 })
 
 // 图片宽度
 const img = reactive({
     width: 0
 })
+
+// 传递给详情页的信息
+const toDetail: toDetailPage = reactive({
+    createrId: 0, // 发帖人ID
+    tiebaName: '', // 对应贴吧名
+    tiebaImg: '', // 贴吧头像
+    thumbUp: 0, // 点赞数
+    tieziId: 0, // 帖子ID
+    createTime: '', // 发帖时间
+    content: '', // 内容
+    title: '', // 标题
+    commentsNum: 0, // 评论数量
+    url: '' // 图片
+});
+
 
 // 从Home来的时候帖子的信息
 const fromHome = async () => {
@@ -104,6 +120,7 @@ const fromHome = async () => {
     const getTieba: AnyObject = await tiebaById(id) as AnyObject;
     Object.assign(tiebas, getTieba)
     tiebas.url = `http://localhost:3000/tiebas/${getTieba.photoTieba}`;
+
 
     const getTiezi = await randomTieziTB(tiebas.id) as AnyObject;
     Object.assign(tiezi, getTiezi);
@@ -138,11 +155,18 @@ const fromUser = async () => {
 
 }
 
+// 显示pop
+const pop = (func: Function) => {
+    if (user.isLogin) {
+        func();
+    } else {
+        isShowPop.value = true;
+    }
+}
 
 // 实现点赞
-const like = async () => {
-
-    if (user.isLogin) {
+const like = () => {
+    pop(async () => {
         if (userIsLike.value === false) {
             const a = await likePost(user.userInfo.id, tiezi.id, 'like');
 
@@ -156,9 +180,37 @@ const like = async () => {
             Object.assign(tiezi, getTiezi);
             userIsLike.value = false;
         }
-    } else {
-        isShowPop.value = true;
-    }
+    })
+
+}
+
+// 实现进入详情页 
+const detailPage = () => {
+    // 传递给详情页的信息
+    toDetail.tiebaName = tiebas.tiebaName;
+    toDetail.tiebaImg = tiebas.url;
+    toDetail.createrId = tiezi.createrId;
+    toDetail.content = tiezi.content;
+    toDetail.title = tiezi.threadTitle;
+    toDetail.commentsNum = tiezi.commentsNum;
+    toDetail.thumbUp = tiezi.thumbUp;
+    toDetail.createTime = tiezi.time;
+    toDetail.url = tiezi.url;
+    toDetail.tieziId = tiezi.id;
+
+    pop(() => {
+        uni.navigateTo({
+            url: '/components/postDetailPage?data=' + encodeURIComponent(JSON.stringify(toDetail))
+        })
+    });
+}
+
+// 实现收藏
+const collection = () => {
+    pop(() => {
+        console.log(2);
+
+    });
 }
 
 // 初始化贴吧信息
@@ -203,13 +255,8 @@ const showInfo = async () => {
         time = Math.floor(time / 60 / 24);
         tiezi.time = `${time}天前`
     }
-
 }
 showInfo();
-
-onShow(() => {
-
-})
 
 // 遮罩层相关
 // 关闭遮罩层
@@ -222,6 +269,7 @@ const userLoginEvent = () => {
         url: '/pages/user/login/index'
     });
 }
+
 
 
 </script>
