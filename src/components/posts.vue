@@ -13,7 +13,7 @@
             <text>{{ tiezi.content }}</text>
         </view>
 
-        <image @click="detailPage" v-if="tiezi.url" :src="tiezi.url" mode="widthFix" :style="{ width: img.width + 'px' }" />
+        <image @click="detailPage" v-if="tiezi.url" :src="tiezi.url" mode="widthFix" />
 
         <view class="footer">
             <view @click="collection">
@@ -90,12 +90,6 @@ const tiezi = reactive({
     tieziImg: '',
     createrId: 0
 })
-
-// 图片宽度
-const img = reactive({
-    width: 0
-})
-
 
 
 // 从Home来的时候帖子的信息
@@ -182,7 +176,7 @@ const detailPage = () => {
 
     pop(() => {
         uni.navigateTo({
-            url: '/components/postDetailPage?data=' + encodeURIComponent(JSON.stringify(data))
+            url: '/components/detailPostPage?data=' + encodeURIComponent(JSON.stringify(data))
         })
     });
 }
@@ -211,15 +205,7 @@ const showInfo = async () => {
     if (getTiezi.tieziImg) {
         tiezi.url = `http://localhost:3000/tiezi/${getTiezi.tieziImg}`;
 
-        // 获取原图宽度
-        uni.getImageInfo({
-            src: tiezi.url,
-            success: ({ width, height, path, orientation, type }) => {
-                // console.log(width, height, path, orientation, type);
-                img.width = width;
-            },
-            fail: (error) => { }
-        })
+        
     }
 
 
