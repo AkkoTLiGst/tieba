@@ -5,8 +5,10 @@
             <text>等级排序</text>
         </view>
 
-        <view class="content">
-            <view class="contentItem" v-for="item in num" :index="item" style="height: 50px;">
+        
+        <view v-if="followArr.length === 0" class="nofollows">您没有关注的吧</view> 
+        <view class="content" v-if="followArr.length !== 0">
+            <view  class="contentItem" v-for="item in num" :index="item" style="height: 50px;">
                 <image :src="`http://localhost:3000/tiebas/${followArr[item - 1].photoName}`" mode="scaleToFill" />
                 <view>{{ followArr[item - 1].name }}吧</view>
             </view>
@@ -18,7 +20,7 @@
 import { loginStore } from '@/store/login';
 import { followTieba } from '@/server/login'
 import { reactive, ref } from 'vue'
-import { onReachBottom } from '@dcloudio/uni-app';
+import { onReachBottom, onShow } from '@dcloudio/uni-app';
 
 // 用于智能提示
 type objArr = {
@@ -34,7 +36,7 @@ const num = ref(0); // 控制显示个数
 
 const initFollows = async () => {
     const data = await followTieba(user.userInfo.id) as objArr[];
-    followArr.push(...data);   
+    followArr.push(...data);
 
     if (followArr.length > 16) {
         num.value = 16;
@@ -68,7 +70,7 @@ onReachBottom(() => {
             font-size: 18px;
         }
     }
-
+    .nofollows{text-align: center; width: 100%;}
     .content {
         background-color: white;
         border-radius: 20rpx;
@@ -80,10 +82,11 @@ onReachBottom(() => {
             display: flex;
             align-items: center;
             padding: 12px 0 12px 16px;
-            view{
+
+            view {
                 width: 100px;
                 overflow: hidden;
-                text-overflow:ellipsis;
+                text-overflow: ellipsis;
                 white-space: nowrap;
             }
 
@@ -95,6 +98,8 @@ onReachBottom(() => {
             }
 
         }
+
+       
     }
 }
 </style>
