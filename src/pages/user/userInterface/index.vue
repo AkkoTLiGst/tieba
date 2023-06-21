@@ -20,8 +20,6 @@ const btnStyle = {
 }
 
 const logOut = () => {
-    console.log(1);
-
     uni.setStorageSync('loginKey', '');
     user.clearUser();
     uni.reLaunch({

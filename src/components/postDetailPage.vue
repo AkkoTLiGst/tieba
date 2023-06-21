@@ -9,12 +9,12 @@
             <text>打开贴吧</text>
         </view>
         <view class="threadStarter">
-            <view class="title">{{ tiezi.title }}</view>
+            <view class="title">{{ tiezi.threadTitle }}</view>
             <view class="user">
                 <image :src="creater.createrImg" mode="scaleToFill" />
                 <view>
                     <text>{{ creater.createrName }}</text>
-                    <text>{{ tiezi.createTime }}</text>
+                    <text>{{ tiezi.createTimeTiezi }}</text>
                 </view>
             </view>
             <view class="content">
@@ -31,8 +31,12 @@
                     <u-icon size="24px" name="chat"></u-icon>
                     <text>{{ tiezi.commentsNum }}</text>
                 </view>
-                <view>
+                <view @click="postLike" v-if="!like">
                     <u-icon size="24px" name="thumb-up"></u-icon>
+                    <text>{{ tiezi.thumbUp }}</text>
+                </view>
+                <view @click="postLike" v-if="like">
+                    <u-icon size="24px" name="thumb-up" :color="'red'"></u-icon>
                     <text>{{ tiezi.thumbUp }}</text>
                 </view>
             </view>
@@ -69,8 +73,12 @@
                     <u-icon size="24px" name="chat"></u-icon>
                     <text>{{ tiezi.commentsNum }}</text>
                 </view>
-                <view>
+                <view @click="postLike" v-if="!like">
                     <u-icon size="24px" name="thumb-up"></u-icon>
+                    <text>{{ tiezi.thumbUp }}</text>
+                </view>
+                <view @click="postLike" v-if="like">
+                    <u-icon size="24px" name="thumb-up" :color="'red'"></u-icon>
                     <text>{{ tiezi.thumbUp }}</text>
                 </view>
                 <view>
@@ -93,10 +101,12 @@
 import { getUserById } from '@/server/user';
 import { findAllCommentId, getComment, createComment, uploadImg } from '@/server/comment';
 import { loginStore } from '@/store/login';
-import type { toDetailPage } from '@/types/types';
+import type { tiezis, toDetailPage } from '@/types/types';
 import { onLoad, onShow } from '@dcloudio/uni-app';
 import { ref, reactive, watchEffect } from 'vue'
 import detailComment from '@/components/detailComment.vue'
+import { isLike, likePost } from '@/server/login';
+import { getTieziById } from '@/server/tiezi';
 
 const user = loginStore();
 
@@ -121,15 +131,18 @@ const btnStyle = {
 
 // 帖子信息
 const tiezi: toDetailPage = reactive({
-    createrId: 0, // 发帖人ID
+    id: 0,
+    threadTitle: '',
+    content: '',
+    createTimeTiezi: '',
+    star: 0,
+    thumbUp: 0,
+    commentsNum: 0,
+    tieziImg: '',
+    createrId: 0,
+    ctieBaId: 0,
     tiebaName: '', // 对应贴吧名
     tiebaImg: '', // 贴吧头像
-    thumbUp: 0, // 点赞数
-    tieziId: 0, // 帖子ID
-    createTime: '', // 发帖时间
-    content: '', // 内容
-    title: '', // 标题
-    commentsNum: 0, // 评论数量
     url: '' // 图片
 });
 
@@ -145,21 +158,34 @@ const comment = reactive<AnyObject[]>([]);
 
 // 获取所有评论的ID
 const getAllCommentId = async () => {
-    return await findAllCommentId(tiezi.tieziId);
+    return await findAllCommentId(tiezi.id);
 }
 // 通过ID将评论push到comment数组中
 const pushComment = async (arr: number[]) => {
     for (let i = 0; i < arr.length; i++) {
         const data = await getComment(arr[i]) as AnyObject;
+        data.creater = creater.createrId;
         comment.push(data);
     }
 }
 
 // 回到上一页
 const rollback = () => {
-    uni.navigateBack({
-        delta: 1
-    })
+    const pages = getCurrentPages()
+	// 有可返回的页面则直接返回，uni.navigateBack  默认返回失败之后会自动刷新页面 ，无法继续返回
+	if (pages.length > 1) {
+	 uni.navigateBack({delta: 1})
+	 return;
+	}
+
+	let a = history.go(-1);
+	// go失败之后则重定向到首页 
+	if (a == undefined) {
+	 uni.reLaunch({
+	  url: "/pages/index/index"
+	 })
+	}
+	return;
 }
 
 const btnDisabled = ref(true); // 按钮是否禁用
@@ -199,29 +225,29 @@ const showComment = () => {
     userComment.value = true;
 }
 
-const userChooseImg = ref('');
 
+const userChooseImg = ref('');
 // 选择图片
 const chooseImgEvent = () => {
     uni.chooseImage({
         sourceType: ['album', 'camera'],
-        count:1,
+        count: 1,
         success: (chooseImageRes) => {
             const tempFilePaths = chooseImageRes.tempFilePaths as string[];
             userChooseImg.value = tempFilePaths[0];
         },
-        fail: (error) => {}
+        fail: (error) => { }
     })
 }
 
 // 发表评论
 const addCommentEvent = async () => {
     const floor = comment.length === 0 ? 2 : comment.length + 2;
-    const data = await createComment(userInput.value, floor, '', user.userInfo.id, tiezi.tieziId) as AnyObject;
+    const data = await createComment(userInput.value, floor, '', user.userInfo.id, tiezi.id) as AnyObject;
     // 如果创建成功将评论push到评论数组
     if (data.id) {
         // 选择了图片，就上传图片再push
-        if(userChooseImg.value !== ''){
+        if (userChooseImg.value !== '') {
             await uploadImg(data.id, userChooseImg.value);
         }
         const com = await getComment(data.id) as AnyObject;
@@ -229,9 +255,24 @@ const addCommentEvent = async () => {
 
         tiezi.commentsNum = tiezi.commentsNum + 1;
 
+        // 发表完成隐藏发表栏
+        userComment.value = false;
+
         // 然后清空输入的评论和选择的图片
         userInput.value = '';
         userChooseImg.value = '';
+    }
+}
+
+// 是否已经点赞帖子
+const like = ref(false);
+// 帖子点赞或取消点赞
+const postLike = async () => {
+    if (like.value) {
+        await likePost(user.userInfo.id, tiezi.id, 'like');
+    } else {
+        await likePost(user.userInfo.id, tiezi.id, 'unlike');
+        like.value = false;
     }
 }
 
@@ -240,14 +281,33 @@ onLoad((e) => {
     // 给topbar定位
     statusBarHeight.value = uni.getSystemInfoSync().statusBarHeight as number || 44;
 
+    const getInfo = JSON.parse(decodeURIComponent(e!.data));
 
-    Object.assign(tiezi, JSON.parse(e!.data)); // 将前一个组件传送过来的参数保存
     const initDetail = async () => {
+        // 获取帖子
+        const getTiezi: tiezis = await getTieziById(getInfo.id) as tiezis;
+        Object.assign(tiezi, getTiezi);
+        if (getTiezi.tieziImg) {
+            tiezi.url = `http://localhost:3000/tiezi/${getTiezi.tieziImg}`;
+        }
+        tiezi.tiebaName = getInfo.tiebaName;
+        tiezi.tiebaImg = getInfo.tiebaImg;
+        tiezi.createTimeTiezi = getInfo.createTime;
+
         // 获取发帖用户信息
         const usr = await getUserById(tiezi.createrId) as AnyObject;
         creater.createrId = usr.id;
         creater.createrName = usr.userName;
         creater.createrImg = 'http://localhost:3000/user/' + usr.photoUser;
+
+        // 如果登录了，获取登录用户是否点赞了当前帖子
+        if (user.isLogin) {
+            const data = await isLike(user.userInfo.id, tiezi.id) as AnyObject;
+            if (data) {
+                like.value = data.isLike;
+            }
+        }
+
 
         // 获取评论ID数组
         const commentId: number[] = await getAllCommentId() as number[];
@@ -369,7 +429,7 @@ page {
         margin-top: 16px;
         padding: 16px 10px;
         background-color: white;
-        
+
         .commentBar {
             display: flex;
             justify-content: space-between;

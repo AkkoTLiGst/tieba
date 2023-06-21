@@ -9,13 +9,13 @@
                         <text>
                             {{ data.user.userName }}
                         </text>
-                        <view v-show="true">
+                        <view v-show="isCreater">
                             楼主
                         </view>
                     </view>
                     <view class="name-bottom">
                         <text>第{{ data.floor }}楼</text>
-                        <text>xx小时前</text>
+                        <text>{{ data.createTimeTiezi }}</text>
                     </view>
                 </view>
 
@@ -27,14 +27,14 @@
         </view>
         <view class="content">
             <text>{{ data.comment }}</text>
-            <image v-if="data.tieziImg" :src="data.tieziImg" mode="widthFix"  />
+            <image v-if="data.tieziImg" :src="data.tieziImg" mode="widthFix" />
         </view>
     </view>
 </template>
 
 <script setup lang="ts">
 import { onLoad } from '@dcloudio/uni-app';
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 const data = reactive<AnyObject>({}); // 评论内容以及评论者
 
@@ -42,9 +42,37 @@ const item = defineProps<{ // 父组件传送的内容
     item: object
 }>();
 Object.assign(data, item.item);
+// 评论者头像
 data.user.photoUser = `http://localhost:3000/user/${data.user.photoUser}`;
+// 评论图片
 if (data.tieziImg) {
     data.tieziImg = `http://localhost:3000/comment/${data.tieziImg}`;
+}
+// 判断是不是楼主
+const isCreater = ref(false);
+if (data.user.id === data.creater) {
+    isCreater.value = true;
+}
+
+// 计算评论发出时间
+const createtime = Math.round(new Date(data.createTimeTiezi).getTime() / 1000); // 评论时间
+const now = Math.round(new Date().getTime() / 1000);
+let time = 0;
+if (Math.round((now - createtime) / 60) > 0) {
+    time = Math.round((now - createtime) / 60);
+    if (time < 60) {
+        data.createTimeTiezi = `${time}分钟前`;
+    } else if (time >= 60 && time < 1440) {
+        time = Math.floor(time / 60);
+        data.createTimeTiezi = `${time}小时前`;
+    } else {
+        time = Math.floor(time / 60 / 24);
+        data.createTimeTiezi = `${time}天前`
+    }
+} else {
+    time = Math.round((now - createtime));
+    data.createTimeTiezi = `${time}秒前`;
+
 }
 </script>
 
@@ -93,6 +121,8 @@ if (data.tieziImg) {
                     font-size: 12px;
                     margin-top: 3px;
                     color: rgba(black, .4);
+                    display: flex;
+                    justify-content: flex-start;
 
                     text:first-child {
                         margin-right: 5px;
@@ -119,7 +149,7 @@ if (data.tieziImg) {
         display: flex;
         flex-direction: column;
 
-        image{
+        image {
             border-radius: 20rpx;
             max-width: 89vw;
         }

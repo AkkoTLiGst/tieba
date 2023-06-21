@@ -96,19 +96,6 @@ const img = reactive({
     width: 0
 })
 
-// 传递给详情页的信息
-const toDetail: toDetailPage = reactive({
-    createrId: 0, // 发帖人ID
-    tiebaName: '', // 对应贴吧名
-    tiebaImg: '', // 贴吧头像
-    thumbUp: 0, // 点赞数
-    tieziId: 0, // 帖子ID
-    createTime: '', // 发帖时间
-    content: '', // 内容
-    title: '', // 标题
-    commentsNum: 0, // 评论数量
-    url: '' // 图片
-});
 
 
 // 从Home来的时候帖子的信息
@@ -186,21 +173,16 @@ const like = () => {
 
 // 实现进入详情页 
 const detailPage = () => {
-    // 传递给详情页的信息
-    toDetail.tiebaName = tiebas.tiebaName;
-    toDetail.tiebaImg = tiebas.url;
-    toDetail.createrId = tiezi.createrId;
-    toDetail.content = tiezi.content;
-    toDetail.title = tiezi.threadTitle;
-    toDetail.commentsNum = tiezi.commentsNum;
-    toDetail.thumbUp = tiezi.thumbUp;
-    toDetail.createTime = tiezi.time;
-    toDetail.url = tiezi.url;
-    toDetail.tieziId = tiezi.id;
+    const data = {
+        id: tiezi.id,
+        tiebaName: tiebas.tiebaName,
+        tiebaImg: tiebas.url,
+        createTime: tiezi.time
+    }
 
     pop(() => {
         uni.navigateTo({
-            url: '/components/postDetailPage?data=' + encodeURIComponent(JSON.stringify(toDetail))
+            url: '/components/postDetailPage?data=' + encodeURIComponent(JSON.stringify(data))
         })
     });
 }
@@ -270,7 +252,9 @@ const userLoginEvent = () => {
     });
 }
 
-
+onShow(() => {
+    // showInfo();
+})
 
 </script>
 

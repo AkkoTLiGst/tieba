@@ -55,7 +55,8 @@ import { ref, reactive } from 'vue'
 import { throttle, isEmail, isMobile } from '@/hooks/index'
 import { inject } from 'vue';
 import { login, getUser } from '@/server/login';
-import type { loginTypes } from '@/types/types';
+
+
 
 // 输入框和按钮样式
 const inputStyle = {
@@ -169,21 +170,28 @@ const loginBtn = async () => {
         username = `mobile:${inputVal.value}`;
     }
 
-    // 返回token和信息
+    // 登录成功返回token和信息，登录失败弹出失败
     const data = await login(username, passwordVal.value) as AnyObject;
 
-    try {
+    if (data.token) {
         uni.setStorageSync('loginKey', data.token);
         user.setUserInfo(); // 用户信息存储到pinia
         user.setIsLogin(true); // 登录状态为true
-        
 
         uni.reLaunch({
             url: '/pages/user/index'
         });
-    } catch (error) {
-        console.log(error);
+    } else {
+        uni.showToast({
+            title: '账号或密码错误',
+            icon: 'error',
+            duration: 1500
+        })
     }
+
+
+
+
 }
 
 
