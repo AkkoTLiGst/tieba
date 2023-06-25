@@ -2,7 +2,7 @@
     <view class="postpage">
         <view class="topBar" :style="{ height: statusBarHeight + 'px' }">
             <u-icon @click="rollback" name="arrow-left" :custom-style="{ width: '56px' }" size="20" color="black"></u-icon>
-            <view>
+            <view @click="enterPostBar">
                 <image :src="tiezi.tiebaImg" mode="scaleToFill" />
                 <text>{{ tiezi.tiebaName }}吧 </text>
             </view>
@@ -171,21 +171,28 @@ const pushComment = async (arr: number[]) => {
 
 // 回到上一页
 const rollback = () => {
-    const pages = getCurrentPages()
-	// 有可返回的页面则直接返回，uni.navigateBack  默认返回失败之后会自动刷新页面 ，无法继续返回
-	if (pages.length > 1) {
-	 uni.navigateBack({delta: 1})
-	 return;
-	}
+    const pages = getCurrentPages() ? getCurrentPages() : [];
+    // 有可返回的页面则直接返回，uni.navigateBack  默认返回失败之后会自动刷新页面 ，无法继续返回
+    if (pages.length > 1) {
+        uni.navigateBack({ delta: 1 })
+        return;
+    }
 
-	let a = history.go(-1);
-	// go失败之后则重定向到首页 
-	if (a == undefined) {
-	 uni.reLaunch({
-	  url: "/pages/index/index"
-	 })
-	}
-	return;
+    let a = history.go(-1);
+    // go失败之后则重定向到首页 
+    if (a == undefined) {
+        uni.reLaunch({
+            url: "/pages/index/index"
+        })
+    }
+    return;
+}
+
+// 进入贴吧
+const enterPostBar = () => {
+    uni.navigateTo({
+        url: '/components/detailPostBar?data=' + tiezi.ctieBaId,
+    })
 }
 
 const btnDisabled = ref(true); // 按钮是否禁用
@@ -268,8 +275,10 @@ const addCommentEvent = async () => {
 const like = ref(false);
 // 帖子点赞或取消点赞
 const postLike = async () => {
-    if (like.value) {
+    if (!like.value) {
         await likePost(user.userInfo.id, tiezi.id, 'like');
+        like.value = true;
+        tiezi.thumbUp++;
     } else {
         await likePost(user.userInfo.id, tiezi.id, 'unlike');
         like.value = false;
@@ -303,7 +312,8 @@ onLoad((e) => {
         // 如果登录了，获取登录用户是否点赞了当前帖子
         if (user.isLogin) {
             const data = await isLike(user.userInfo.id, tiezi.id) as AnyObject;
-            if (data) {
+            
+            if (data.isLike) {
                 like.value = data.isLike;
             }
         }

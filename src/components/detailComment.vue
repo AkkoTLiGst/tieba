@@ -33,6 +33,7 @@
 </template>
 
 <script setup lang="ts">
+import { mathTime } from '@/hooks';
 import { onLoad } from '@dcloudio/uni-app';
 import { reactive, ref } from 'vue'
 
@@ -55,25 +56,7 @@ if (data.user.id === data.creater) {
 }
 
 // 计算评论发出时间
-const createtime = Math.round(new Date(data.createTimeTiezi).getTime() / 1000); // 评论时间
-const now = Math.round(new Date().getTime() / 1000);
-let time = 0;
-if (Math.round((now - createtime) / 60) > 0) {
-    time = Math.round((now - createtime) / 60);
-    if (time < 60) {
-        data.createTimeTiezi = `${time}分钟前`;
-    } else if (time >= 60 && time < 1440) {
-        time = Math.floor(time / 60);
-        data.createTimeTiezi = `${time}小时前`;
-    } else {
-        time = Math.floor(time / 60 / 24);
-        data.createTimeTiezi = `${time}天前`
-    }
-} else {
-    time = Math.round((now - createtime));
-    data.createTimeTiezi = `${time}秒前`;
-
-}
+data.createTimeTiezi = mathTime(data.createTimeTiezi);
 </script>
 
 <style scoped lang="scss">

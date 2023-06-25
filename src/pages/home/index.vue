@@ -16,7 +16,6 @@ provide('from', from)
 
 onReachBottom(() => {
     count.value = count.value + 10;
-
 });
 
 </script>

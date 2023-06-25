@@ -5,10 +5,10 @@
             <text>等级排序</text>
         </view>
 
-        
-        <view v-if="followArr.length === 0" class="nofollows">您没有关注的吧</view> 
+
+        <view v-if="followArr.length === 0" class="nofollows">您没有关注的吧</view>
         <view class="content" v-if="followArr.length !== 0">
-            <view  class="contentItem" v-for="item in num" :index="item" style="height: 50px;">
+            <view class="contentItem" v-for="item in num" :index="item" style="height: 50px;" @click="enterPostBar(item)">
                 <image :src="`http://localhost:3000/tiebas/${followArr[item - 1].photoName}`" mode="scaleToFill" />
                 <view>{{ followArr[item - 1].name }}吧</view>
             </view>
@@ -25,7 +25,8 @@ import { onReachBottom, onShow } from '@dcloudio/uni-app';
 // 用于智能提示
 type objArr = {
     name: string;
-    photoName: string
+    photoName: string,
+    id: number
 }
 
 const user = loginStore();
@@ -47,11 +48,30 @@ const initFollows = async () => {
 }
 initFollows()
 
+// 进入贴吧
+const enterPostBar = (item: number) => {
+    uni.navigateTo({
+        url: '/components/detailPostBar?data=' + followArr[item - 1].id
+    })
+}
+
 onReachBottom(() => {
     if (num.value + 16 < followArr.length) {
         num.value = num.value + 16;
     } else {
         num.value = followArr.length;
+    }
+});
+
+onShow(() => {
+    // 重新获取关注列表
+    const refresh = async () => {
+        const data = await followTieba(user.userInfo.id) as objArr[];
+        if (data.length > followArr.length) {
+            for (let i = followArr.length; i < data.length; i++){
+                followArr.push(data[i]);
+            }
+        }
     }
 });
 </script>
@@ -70,7 +90,12 @@ onReachBottom(() => {
             font-size: 18px;
         }
     }
-    .nofollows{text-align: center; width: 100%;}
+
+    .nofollows {
+        text-align: center;
+        width: 100%;
+    }
+
     .content {
         background-color: white;
         border-radius: 20rpx;
@@ -99,7 +124,7 @@ onReachBottom(() => {
 
         }
 
-       
+
     }
 }
 </style>

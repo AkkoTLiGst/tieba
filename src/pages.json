@@ -40,6 +40,18 @@
 			"style": {
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "components/detailPostBar",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "components/postsForBar",
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"tabBar": {

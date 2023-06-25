@@ -62,3 +62,25 @@ export const followTieba = (user_id: number) => {
         timeout: 5000
     }).then(res => res.data);
 }
+
+// 是否关注贴吧
+export const isSubscribe = (userId: number, tiebaId: number) => {
+    return uni.request({
+        url: '/api/auth/isSubscribe',
+        method: 'GET',
+        data: { userId, tiebaId},
+        header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
+        timeout: 5000
+    }).then(res => res.data);
+}
+
+// 关注贴吧
+export const subTieba = (user_id: number, tieba_id: number) => {
+    return uni.request({
+        url: '/api/auth/followTieba',
+        method: 'POST',
+        data: { user_id, tieba_id},
+        header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
+        timeout: 5000
+    }).then(res => res.data);
+}

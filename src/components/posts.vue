@@ -1,8 +1,9 @@
+<!-- 显示贴吧头像的帖子 -->
 <template>
     <view class="hm-recommend">
         <view class="top">
-            <image :src="tiebas.url" lazy-load="true" />
-            <view>
+            <image :src="tiebas.url" lazy-load="true" @click="detailPostBar" />
+            <view @click="detailPostBar">
                 <text>{{ tiebas.tiebaName }}吧</text>
                 <text>{{ tiezi.time }} </text>
             </view>
@@ -54,6 +55,7 @@ import { reactive, inject, ref, provide } from 'vue';
 import type { tiezis, toDetailPage } from '@/types/types'
 import { loginStore } from '@/store/login';
 import { onShow } from '@dcloudio/uni-app';
+import { mathTime } from '@/hooks';
 
 const user = loginStore(); // 用户信息
 
@@ -165,7 +167,7 @@ const like = () => {
 
 }
 
-// 实现进入详情页 
+// 实现进入帖子详情页 
 const detailPage = () => {
     const data = {
         id: tiezi.id,
@@ -179,6 +181,15 @@ const detailPage = () => {
             url: '/components/detailPostPage?data=' + encodeURIComponent(JSON.stringify(data))
         })
     });
+}
+
+// 实现进入贴吧详情页
+const detailPostBar = () => {
+    pop(() => {
+        uni.navigateTo({
+            url: '/components/detailPostBar?data=' + tiebas.id,
+        })
+    })
 }
 
 // 实现收藏
@@ -204,25 +215,11 @@ const showInfo = async () => {
     // 设置帖子图片
     if (getTiezi.tieziImg) {
         tiezi.url = `http://localhost:3000/tiezi/${getTiezi.tieziImg}`;
-
-        
     }
 
 
     // 计算帖子发出时间
-    const createtime = Math.round(new Date(tiezi.createTimeTiezi).getTime() / 1000); // 发帖时间
-    const now = Math.round(new Date().getTime() / 1000);
-    let time = Math.round((now - createtime) / 60);
-
-    if (time < 60) {
-        tiezi.time = `${time}分钟前`;
-    } else if (time >= 60 && time < 1440) {
-        time = Math.floor(time / 60);
-        tiezi.time = `${time}小时前`;
-    } else {
-        time = Math.floor(time / 60 / 24);
-        tiezi.time = `${time}天前`
-    }
+    tiezi.time = mathTime(tiezi.createTimeTiezi);
 }
 showInfo();
 
@@ -239,7 +236,17 @@ const userLoginEvent = () => {
 }
 
 onShow(() => {
-    // showInfo();
+    // 用于回退的时候刷新信息
+    const refresh = async () => {
+        if (tiezi.id !== 0) {
+            const getTiezi: tiezis = await getTieziById(tiezi.id) as tiezis;
+            Object.assign(tiezi, getTiezi);
+
+            const isLikeData = await isLike(user.userInfo.id, tiezi.id) as AnyObject;
+            userIsLike.value = isLikeData.isLike;
+        }
+    }
+    refresh();
 })
 
 </script>

@@ -16,3 +16,20 @@ export const getTieziById = (tieziID: number) => {
     }).then(res => res.data);
 }
 
+// 获取对应贴吧的对应个数帖子
+export const getPostByTieba = (tiebaId: number, page: number, pageSize: number) => {
+    return uni.request({
+        url: '/api/tiezi/allPost',
+        data: {id: tiebaId, page, pageSize},
+        timeout: 5000
+    }).then(res => res.data);
+}
+
+// 获取对应贴吧的帖子数量
+export const getPostCount = (tiebaId: number) => {
+    return uni.request({
+        url: '/api/tiezi/postCount',
+        data: {id: tiebaId},
+        timeout: 5000
+    }).then(res => res.data);
+}
