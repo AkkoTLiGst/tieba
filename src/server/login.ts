@@ -37,7 +37,7 @@ export const likePost = (user_id: number, post_id: number, code: string) => {
     return uni.request({
         url: '/api/auth/authLike',
         method: 'PUT',
-        data: {post_id, user_id, code},
+        data: { post_id, user_id, code },
         header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
         timeout: 5000
     }).then(res => res.data)
@@ -55,11 +55,11 @@ export const isLike = (user_id: number, post_id: number) => {
 }
 
 // 通过ID获取关注的贴吧
-export const followTieba = (user_id: number) => {
+export const followTieba = (id: number) => {
     return uni.request({
         url: '/api/auth/authUserTieba',
         method: 'GET',
-        data: { user_id},
+        data: { id },
         header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
         timeout: 5000
     }).then(res => res.data);
@@ -70,7 +70,7 @@ export const isSubscribe = (userId: number, tiebaId: number) => {
     return uni.request({
         url: '/api/auth/isSubscribe',
         method: 'GET',
-        data: { userId, tiebaId},
+        data: { userId, tiebaId },
         header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
         timeout: 5000
     }).then(res => res.data);
@@ -81,7 +81,7 @@ export const subTieba = (user_id: number, tieba_id: number) => {
     return uni.request({
         url: '/api/auth/followTieba',
         method: 'POST',
-        data: { user_id, tieba_id},
+        data: { user_id, tieba_id },
         header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
         timeout: 5000
     }).then(res => res.data);
@@ -89,12 +89,12 @@ export const subTieba = (user_id: number, tieba_id: number) => {
 
 
 // 获取登录用户的帖子
-export const loginUserPosts  = (id: number, page: number, pageSize: number) => {
+export const loginUserPosts = (id: number, page: number, pageSize: number) => {
     return uni.request({
         url: '/api/auth/userPosts',
         method: 'GET',
         header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
-        data:{id, page, pageSize},
+        data: { id, page, pageSize },
         timeout: 5000
     }).then(res => res.data);
 }
@@ -105,7 +105,7 @@ export const authUpdateUser = (userInfo: User) => {
         url: '/api/auth/authUpdateUser',
         method: 'PUT',
         header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
-        data:{userInfo},
+        data: { userInfo },
         timeout: 5000
     }).then(res => res.data);
 }

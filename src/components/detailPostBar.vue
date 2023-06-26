@@ -99,6 +99,7 @@ const initTieba = async () => {
 
     // 用户是否关注贴吧
     const data = await isSubscribe(user.userInfo.id, tiebaId) as { data: boolean };
+    
     if (data.data) {
         isSub.value = data.data;
         unicodeIcon.icon.icon = '\ue603';

@@ -36,7 +36,10 @@ const followArr = reactive<objArr[]>([]); // 贴吧数组
 const num = ref(0); // 控制显示个数
 
 const initFollows = async () => {
+    
     const data = await followTieba(user.userInfo.id) as objArr[];
+    
+    console.log(user.userInfo);
     followArr.push(...data);
 
     if (followArr.length > 16) {
