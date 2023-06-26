@@ -242,8 +242,10 @@ onShow(() => {
             const getTiezi: tiezis = await getTieziById(tiezi.id) as tiezis;
             Object.assign(tiezi, getTiezi);
 
-            const isLikeData = await isLike(user.userInfo.id, tiezi.id) as AnyObject;
-            userIsLike.value = isLikeData.isLike;
+            if (user.isLogin) {
+                const isLikeData = await isLike(user.userInfo.id, tiezi.id) as AnyObject;
+                userIsLike.value = isLikeData.isLike;
+            }
         }
     }
     refresh();
