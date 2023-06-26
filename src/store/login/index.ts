@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { names } from '../storeName'
 import { reactive, ref } from 'vue'
-import type { loginTypes } from '@/types/types';
+import type { User } from '@/types/types';
 import { getTokenTiezi, getUser } from '@/server/login';
 
 export const loginStore = defineStore(
@@ -12,12 +12,13 @@ export const loginStore = defineStore(
         const isLogin = ref(false); // 是否登陆
 
         // 用户信息
-        const userInfo: loginTypes = reactive({
-            username: '',
+        const userInfo: User = reactive({
+            userName: '',
             id: 0,
             userId: '',
             photoUser: '',
             email: '',
+            aboutMe: '',
             tiezisID: []
         }); // 用户信息
 
@@ -28,11 +29,12 @@ export const loginStore = defineStore(
 
         function clearUser() {
             Object.assign(userInfo, {
-                username: '',
+                userName: '',
                 id: 0,
                 userId: '',
                 photoUser: '',
                 email: '',
+                aboutMe: '',
                 tiezisID: []
             });
             isLogin.value = false;
@@ -40,8 +42,14 @@ export const loginStore = defineStore(
 
         // 保存用户信息
         async function setUserInfo() {
-            const data: loginTypes = await getUser() as loginTypes;
+            const data = await getUser() as AnyObject;
+            
             Object.assign(userInfo, data);
+        }
+
+        // 更新用户信息
+        function updateUserInfo(user: User) {
+            Object.assign(userInfo, user);
         }
 
 
@@ -51,7 +59,7 @@ export const loginStore = defineStore(
             userInfo.tiezisID = arr.reverse(); // reverse倒序输出数组
         }
 
-        return { isLogin, userInfo, setIsLogin, setUserInfo, clearUser, updateTieziID }
+        return { isLogin, userInfo, setIsLogin, updateUserInfo, setUserInfo, clearUser, updateTieziID }
     },
     {
         unistorage: true // 持久化

@@ -159,20 +159,20 @@ const user = loginStore();
 
 // 登录事件
 const loginBtn = async () => {
-    let username = '';
+    let userName = '';
 
-    // 根据判断好的账号类型发送不同的username
+    // 根据判断好的账号类型发送不同的userName
     if (isWhat.isUserId) {
-        username = `userId:${inputVal.value}`;
+        userName = `userId:${inputVal.value}`;
     } else if (isWhat.isEmail) {
-        username = `email:${inputVal.value}`;
+        userName = `email:${inputVal.value}`;
     } else if (isWhat.isMobile) {
-        username = `mobile:${inputVal.value}`;
+        userName = `mobile:${inputVal.value}`;
     }
 
     // 登录成功返回token和信息，登录失败弹出失败
-    const data = await login(username, passwordVal.value) as AnyObject;
-
+    const data = await login(userName, passwordVal.value) as AnyObject;
+    
     if (data.token) {
         uni.setStorageSync('loginKey', data.token);
         user.setUserInfo(); // 用户信息存储到pinia

@@ -188,3 +188,22 @@ export const mathTime = (createTime: string) => {
         return `${time}秒前`;
     }
 }
+
+// 回到上一页
+export const rollback = () => {
+    const pages = getCurrentPages() ? getCurrentPages() : [];
+    // 有可返回的页面则直接返回，uni.navigateBack  默认返回失败之后会自动刷新页面 ，无法继续返回
+    if (pages.length > 1) {
+        uni.navigateBack({ delta: 1 });
+        return;
+    }
+
+    let a = history.go(-1);
+    // go失败之后则重定向到首页 
+    if (a == undefined) {
+        uni.reLaunch({
+            url: "/pages/index/index"
+        })
+    }
+    return;
+}

@@ -37,7 +37,7 @@
                 </view>
             </view>
 
-            <postsForBar v-for="item in tieziArr" :index="item" :item="item" />
+            <postsForBar v-for="item in tieziArr" :index="item" :item="item" :from="''" />
             <view class="end" v-if="isAllPost">已加载完所有帖子</view>
         </view>
     </view>
@@ -52,6 +52,7 @@ import type { tieba, tiezis, toDetailPage } from '@/types/types'
 import { reactive, ref } from 'vue';
 import { getImage, newUrl } from '@/hooks/index'
 import { loginStore } from '@/store/login';
+import { rollback } from '@/hooks/index';
 
 // 设置三方图标
 const unicodeIcon = reactive({
@@ -145,24 +146,6 @@ onLoad((e) => {
     initTiezi();
 });
 
-// 回到上一页
-const rollback = () => {
-    const pages = getCurrentPages() ? getCurrentPages() : [];
-    // 有可返回的页面则直接返回，uni.navigateBack  默认返回失败之后会自动刷新页面 ，无法继续返回
-    if (pages.length > 1) {
-        uni.navigateBack({ delta: 1 })
-        return;
-    }
-
-    let a = history.go(-1);
-    // go失败之后则重定向到首页 
-    if (a == undefined) {
-        uni.reLaunch({
-            url: "/pages/index/index"
-        })
-    }
-    return;
-}
 
 // 关注贴吧
 const subscribeEvent = async () => {

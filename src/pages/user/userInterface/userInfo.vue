@@ -1,13 +1,13 @@
 <template>
     <view class="userInfo">
-        <view class="user">
-            <image class="useravatar" :src="`http://localhost:3000/user/${user.userInfo.photoUser}`"></image>
-            <view class="username">
+        <view class="user" >
+            <image  @click="toDetailUserPage" class="useravatar" :src="`http://localhost:3000/user/${user.userInfo.photoUser}`"></image>
+            <view class="username"  @click="toDetailUserPage">
                 <view class="username-top">
-                    <text>{{ user.userInfo.username }}</text>
+                    <text>{{ user.userInfo.userName }}</text>
                     <i class="iconfont" :style="unicodeIcon.sex.color">{{ unicodeIcon.sex.icon }}</i>
                 </view>
-                <text class="introduction">暂无简介</text>
+                <text class="introduction">{{ user.userInfo.aboutMe }}</text>
             </view>
         </view>
         <view class="items" @click="myPosts">
@@ -59,6 +59,12 @@ const myPosts = () => {
     });
 }
 
+// 跳转到用户界面
+const toDetailUserPage = () => {
+    uni.navigateTo({
+        url:'/components/detailUserPage?userId=' + user.userInfo.id,
+    })
+}
 
 </script>
 

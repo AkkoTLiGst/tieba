@@ -1,3 +1,5 @@
+import type { User } from "@/types/types";
+
 // 登录
 export const login = (username: string, password: string) => {
     return uni.request({
@@ -81,6 +83,29 @@ export const subTieba = (user_id: number, tieba_id: number) => {
         method: 'POST',
         data: { user_id, tieba_id},
         header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
+        timeout: 5000
+    }).then(res => res.data);
+}
+
+
+// 获取登录用户的帖子
+export const loginUserPosts  = (id: number, page: number, pageSize: number) => {
+    return uni.request({
+        url: '/api/auth/userPosts',
+        method: 'GET',
+        header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
+        data:{id, page, pageSize},
+        timeout: 5000
+    }).then(res => res.data);
+}
+
+// 更新用户信息
+export const authUpdateUser = (userInfo: User) => {
+    return uni.request({
+        url: '/api/auth/authUpdateUser',
+        method: 'PUT',
+        header: { Authorization: `Bearer ${uni.getStorageSync('loginKey')}` },
+        data:{userInfo},
         timeout: 5000
     }).then(res => res.data);
 }

@@ -58,6 +58,7 @@ page {
 
     .lg-img {
         width: 100vw;
+        max-width: 624px;
         height: 380rpx;
         background-image: linear-gradient(to top, #FFFFFF, transparent 50%), url("@/static/header-bg.png");
         background-repeat: no-repeat;

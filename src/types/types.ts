@@ -1,10 +1,11 @@
 // 用户信息
-export type loginTypes = {
-    username: string,
+export type User = {
+    userName: string,
     id: number,
     userId: string,
     photoUser: string,
     email: string,
+    aboutMe: string,
     tiezisID: number[]
 }
 

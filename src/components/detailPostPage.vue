@@ -11,8 +11,8 @@
         <view class="threadStarter">
             <view class="title">{{ tiezi.threadTitle }}</view>
             <view class="user">
-                <image :src="creater.createrImg" mode="scaleToFill" />
-                <view>
+                <image @click="toDetailUserPage"  :src="creater.createrImg" mode="scaleToFill" />
+                <view @click="toDetailUserPage" >
                     <text>{{ creater.createrName }}</text>
                     <text>{{ tiezi.createTimeTiezi }}</text>
                 </view>
@@ -107,6 +107,7 @@ import { ref, reactive, watchEffect } from 'vue'
 import detailComment from '@/components/detailComment.vue'
 import { isLike, likePost } from '@/server/login';
 import { getTieziById } from '@/server/tiezi';
+import { rollback } from '@/hooks';
 
 const user = loginStore();
 
@@ -169,29 +170,19 @@ const pushComment = async (arr: number[]) => {
     }
 }
 
-// 回到上一页
-const rollback = () => {
-    const pages = getCurrentPages() ? getCurrentPages() : [];
-    // 有可返回的页面则直接返回，uni.navigateBack  默认返回失败之后会自动刷新页面 ，无法继续返回
-    if (pages.length > 1) {
-        uni.navigateBack({ delta: 1 })
-        return;
-    }
-
-    let a = history.go(-1);
-    // go失败之后则重定向到首页 
-    if (a == undefined) {
-        uni.reLaunch({
-            url: "/pages/index/index"
-        })
-    }
-    return;
-}
 
 // 进入贴吧
 const enterPostBar = () => {
     uni.navigateTo({
         url: '/components/detailPostBar?data=' + tiezi.ctieBaId,
+    })
+}
+
+// 跳转到用户界面
+const toDetailUserPage = () => {
+    uni.navigateTo({
+        url:'/components/detailUserPage?userId=' + creater.createrId,
+        animationType: 'pop-in'
     })
 }
 
@@ -312,7 +303,7 @@ onLoad((e) => {
         // 如果登录了，获取登录用户是否点赞了当前帖子
         if (user.isLogin) {
             const data = await isLike(user.userInfo.id, tiezi.id) as AnyObject;
-            
+
             if (data.isLike) {
                 like.value = data.isLike;
             }

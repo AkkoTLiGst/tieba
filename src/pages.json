@@ -20,10 +20,6 @@
 			"style": {}
 		},
 		{
-			"path": "pages/message/index",
-			"style": {}
-		},
-		{
 			"path": "pages/user/login/index",
 			"style": {
 				"navigationStyle": "custom"
@@ -48,11 +44,18 @@
 			}
 		},
 		{
-			"path": "components/postsForBar",
+			"path": "components/detailUserPage",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "components/editUser",
 			"style": {
 				"navigationStyle": "custom"
 			}
 		}
+
 	],
 	"tabBar": {
 		"list": [
@@ -63,10 +66,6 @@
 			{
 				"text": "进吧",
 				"pagePath": "pages/enterTieba/index"
-			},
-			{
-				"text": "消息",
-				"pagePath": "pages/message/index"
 			},
 			{
 				"text": "我的",

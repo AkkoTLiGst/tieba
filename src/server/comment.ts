@@ -10,7 +10,7 @@ export const createComment = (comment: string, floor: number, file: string, user
     }).then(res => res.data);
 }
 
-// 发表评论的同时上传图片
+// 发表评论的同时上传的图片
 export const uploadImg = (id: number, file: string) => {
     return uni.uploadFile({
         url: '/api/comment/uploadImg',

@@ -2,10 +2,13 @@
 <template>
     <view class="postsForBar">
         <view class="top">
-            <image :src="creater.url" mode="scaleToFill" />
-            <view class="user">
+            <image @click="toDetailUserPage" :src="creater.url" mode="scaleToFill" />
+            <view @click="toDetailUserPage" class="user">
                 <text>{{ creater.userName }}</text>
-                <text>{{ tiezi.createTimeTiezi }}</text>
+                <view>
+                    <text v-if="item.from === 'detailUserPage'">{{ tiezi.tiebaName }}吧</text>
+                    <text>{{ tiezi.createTimeTiezi }}</text>
+                </view>
             </view>
         </view>
 
@@ -39,17 +42,18 @@
 
 <script setup lang="ts">
 import { getUserById } from '@/server/user';
-import type { tiezis, Creater, toDetailPage } from '@/types/types';
+import type { tiezis, Creater, toDetailPage, tieba } from '@/types/types';
 import { reactive, ref } from 'vue';
 import { mathTime, newUrl } from '@/hooks/index'
 import { loginStore } from '@/store/login';
 import { isLike, likePost } from '@/server/login';
 import { getTieziById } from '@/server/tiezi';
+import { tiebaById } from '@/server/tiebas';
 
 // 用户信息
 const user = loginStore();
 
-const item = defineProps<{ item: tiezis }>(); // 从父组件获取item
+const item = defineProps<{ item: tiezis, from: string }>(); // 从父组件获取item
 // 帖子信息
 const tiezi: toDetailPage = reactive({
     id: 0,
@@ -89,7 +93,7 @@ const detailPage = () => {
         tiebaImg: tiezi.tiebaImg,
         createTime: tiezi.createTimeTiezi
     }
-    
+
     uni.navigateTo({
         url: '/components/detailPostPage?data=' + encodeURIComponent(JSON.stringify(data))
     })
@@ -121,9 +125,27 @@ const collection = () => {
 
 }
 
+// 跳转到用户界面
+const toDetailUserPage = () => {
+    if (item.from !== 'detailUserPage') {
+        uni.navigateTo({
+            url: '/components/detailUserPage?userId=' + creater.id,
+            animationType: 'pop-in'
+        })
+    }
+}
+
 const initPost = async () => {
     // 将父组件传入的帖子信息赋给 tiezi
     Object.assign(tiezi, item.item);
+
+    // 如果父组件没有传递贴吧信息，就自己获取
+    if (tiezi.tiebaName === '') {
+        const data = await tiebaById(tiezi.ctieBaId) as tieba;
+        tiezi.url = newUrl(tiezi.tieziImg, 'tiezi'); // 帖子图片
+        tiezi.tiebaImg = newUrl(data.photoTieba, 'tiebas'); // 对应贴吧头像
+        tiezi.tiebaName = data.tiebaName; // 对应贴吧名
+    }
 
     // 计算发帖时间
     tiezi.createTimeTiezi = mathTime(tiezi.createTimeTiezi);
@@ -163,13 +185,18 @@ initPost();
             flex-direction: column;
             justify-content: center;
 
-            text:first-child {
-                font-size: 17px;
-            }
+        }
 
-            text:last-child {
+        .user {
+            view {
                 font-size: 12px;
                 color: rgba($color: #000000, $alpha: .4);
+                flex-direction: row;
+                justify-content: flex-start;
+
+                text {
+                    margin-right: 5px;
+                }
             }
         }
     }
