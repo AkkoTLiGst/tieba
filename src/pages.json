@@ -55,6 +55,13 @@
 				"navigationStyle": "custom"
 			}
 		}
+		,
+		{
+			"path": "components/posting",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}
 
 	],
 	"tabBar": {

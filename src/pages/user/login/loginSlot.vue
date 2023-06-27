@@ -87,7 +87,7 @@ const isWhat = reactive({ // 用于判断用户输入的账号类型
 })
 
 // 当输入账号时，按钮可以点击
-const inputAccountEvent = throttle(() => { // 使用节流
+const inputAccountEvent = () => {
     // 当初始和输入手机号后，判断是否清空手机号
     if (isShowNext || isWhat.isMobile) {
         inputVal.value === '' ?
@@ -100,7 +100,7 @@ const inputAccountEvent = throttle(() => { // 使用节流
             isDisabled.value = true :
             isDisabled.value = false;
     }
-}, 100);
+};
 
 // accountBtn的单击事件
 const nextBtn = () => {
@@ -188,14 +188,7 @@ const loginBtn = async () => {
             duration: 1500
         })
     }
-
-
-
-
 }
-
-
-
 </script>
 
 <style scoped lang="scss">

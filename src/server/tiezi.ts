@@ -1,3 +1,13 @@
+// 发表帖子
+export const createPost = (post: object) => {
+    return uni.request({
+        url: `/api/tiezi/create`,
+        method: 'POST',
+        data: { ...post },
+        timeout: 5000
+    }).then(res => res.data);
+}
+
 // 随机获取帖子
 export const randomTieziTB = (tiebaId: number) => {
     return uni.request({

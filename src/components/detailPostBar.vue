@@ -40,6 +40,17 @@
             <postsForBar v-for="item in tieziArr" :index="item" :item="item" :from="''" />
             <view class="end" v-if="isAllPost">已加载完所有帖子</view>
         </view>
+
+        <view class="posting" @click="postingEvent"
+            v-show="postingShow"
+            :style="
+                { 
+                    backgroundColor: `rgb(${themeColor.r}, ${themeColor.g}, ${themeColor.b})` ,
+                    transform: `translateX(${postingLeft}px)`
+                }"
+        >
+            <u-icon name="plus" color="white" size="25"></u-icon>
+        </view>
     </view>
 </template>
 <script setup lang="ts">
@@ -60,13 +71,6 @@ const unicodeIcon = reactive({
         icon: '\ue662',
         color: 'color: white'
     }
-    // signIn: {
-    //     icon: '\ue602'
-    // },
-    // noSignIn: {
-    //     icon: '\ue603',
-    //     color: 'color: white'
-    // }
 })
 
 let tiebaId = 0
@@ -99,7 +103,7 @@ const initTieba = async () => {
 
     // 用户是否关注贴吧
     const data = await isSubscribe(user.userInfo.id, tiebaId) as { data: boolean };
-    
+
     if (data.data) {
         isSub.value = data.data;
         unicodeIcon.icon.icon = '\ue603';
@@ -132,6 +136,19 @@ const initTiezi = async () => {
     }
 }
 
+// 跳转到发帖界面
+const postingEvent = () => {
+    uni.navigateTo({
+        url: '/components/posting?id=' + tiebaId + '&name=' + tiebaInfo.tiebaName,
+    })
+}
+
+// 设置发帖按钮的位置
+const postingLeft = ref<number>(0);
+// 当移动到指定位置时才显示按钮
+const postingShow = ref(false);
+
+
 // 是否显示完全部帖子
 const isAllPost = ref(false);
 
@@ -145,6 +162,18 @@ onLoad((e) => {
 
     initTieba();
     initTiezi();
+
+    // 设置发帖按钮的位置
+    setTimeout(() => {
+        // 获取页面宽度（非视口宽度）
+        const query = uni.createSelectorQuery().select(".detailPostBar");
+        query.boundingClientRect((data) => {
+            const a = data as UniApp.NodeInfo;
+            // 页面宽度减去发帖按钮的宽度+10等于 发帖按钮需要显示的位置
+            postingLeft.value = a.width as number - 75;
+            postingShow.value = true;
+        }).exec();
+    }, 1)
 });
 
 
@@ -285,6 +314,16 @@ page {
             justify-content: center;
             font-size: 13px;
         }
+    }
+
+    .posting {
+        position: fixed;
+        padding: 15px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        bottom: 5%;
     }
 }
 </style>

@@ -93,8 +93,11 @@ onLoad((e) => {
 </script>
 
 <style scoped lang="scss">
+page{background-color: #f7f7f7;}
 .editUser {
     padding: 10px 10px;
+    background-color: white;
+    height: 100vh;
 
     .topBar {
         display: flex;

@@ -11,8 +11,8 @@
         <view class="threadStarter">
             <view class="title">{{ tiezi.threadTitle }}</view>
             <view class="user">
-                <image @click="toDetailUserPage"  :src="creater.createrImg" mode="scaleToFill" />
-                <view @click="toDetailUserPage" >
+                <image @click="toDetailUserPage" :src="creater.createrImg" mode="scaleToFill" />
+                <view @click="toDetailUserPage">
                     <text>{{ creater.createrName }}</text>
                     <text>{{ tiezi.createTimeTiezi }}</text>
                 </view>
@@ -56,7 +56,7 @@
             </view>
             <view class="detailComment">
                 <view v-for="item in comment" :index="item">
-                    <detail-comment :item="item"></detail-comment>
+                    <detailCommentVue :item="item" />
                 </view>
                 <view class="end">已加载全部回复</view>
             </view>
@@ -104,10 +104,11 @@ import { loginStore } from '@/store/login';
 import type { tiezis, toDetailPage } from '@/types/types';
 import { onLoad, onShow } from '@dcloudio/uni-app';
 import { ref, reactive, watchEffect } from 'vue'
-import detailComment from '@/components/detailComment.vue'
 import { isLike, likePost } from '@/server/login';
 import { getTieziById } from '@/server/tiezi';
-import { rollback } from '@/hooks';
+import posts from './posts.vue';
+import detailCommentVue from './detailComment.vue';
+import { rollback, debounce } from '@/hooks';
 
 const user = loginStore();
 
@@ -181,7 +182,7 @@ const enterPostBar = () => {
 // 跳转到用户界面
 const toDetailUserPage = () => {
     uni.navigateTo({
-        url:'/components/detailUserPage?userId=' + creater.createrId,
+        url: '/components/detailUserPage?userId=' + creater.createrId,
         animationType: 'pop-in'
     })
 }
@@ -189,25 +190,16 @@ const toDetailUserPage = () => {
 const btnDisabled = ref(true); // 按钮是否禁用
 const userInput = ref('');
 
-// 节流
-const userInputEvent = (first: boolean, timer: number) => {
-    if (first && timer === 0) {
-        btnDisabled.value = false;
-    }
-    return setTimeout(() => {
-        btnDisabled.value = false;
-    }, 600)
-}
 // 监听用户是否输入，如果输入就可以点击发表，如果清空了就无法点击发表
-watchEffect((clear) => {
-    let timer: number = 0;
-    if (userInput.value) {
-        timer = userInputEvent(true, timer)
-    } else {
-        btnDisabled.value = true;
-
-    }
-    clear(() => clearTimeout(timer));
+watchEffect(() => {
+    userInput.value;
+    debounce(() => {
+        if (userInput.value) {
+            btnDisabled.value = false;
+        } else {
+            btnDisabled.value = true;
+        }
+    }, 300, {first: true, end: true})();
 })
 
 // 是否显示发表评论

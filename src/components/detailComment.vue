@@ -34,7 +34,6 @@
 
 <script setup lang="ts">
 import { mathTime } from '@/hooks';
-import { onLoad } from '@dcloudio/uni-app';
 import { reactive, ref } from 'vue'
 
 const data = reactive<AnyObject>({}); // 评论内容以及评论者
