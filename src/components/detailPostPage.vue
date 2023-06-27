@@ -241,6 +241,7 @@ const addCommentEvent = async () => {
             await uploadImg(data.id, userChooseImg.value);
         }
         const com = await getComment(data.id) as AnyObject;
+        com.creater = creater.createrId;
         comment.push(com);
 
         tiezi.commentsNum = tiezi.commentsNum + 1;

@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { mathTime } from '@/hooks';
+import { onLoad, onShow } from '@dcloudio/uni-app';
 import { reactive, ref } from 'vue'
 
 const data = reactive<AnyObject>({}); // 评论内容以及评论者
@@ -41,18 +42,23 @@ const data = reactive<AnyObject>({}); // 评论内容以及评论者
 const item = defineProps<{ // 父组件传送的内容
     item: object
 }>();
-Object.assign(data, item.item);
-// 评论者头像
-data.user.photoUser = `http://localhost:3000/user/${data.user.photoUser}`;
-// 评论图片
-if (data.tieziImg) {
-    data.tieziImg = `http://localhost:3000/comment/${data.tieziImg}`;
-}
-// 判断是不是楼主
+
 const isCreater = ref(false);
-if (data.user.id === data.creater) {
-    isCreater.value = true;
-}
+
+onLoad(() => {
+    Object.assign(data, item.item);
+    // 评论者头像
+    data.user.photoUser = `http://localhost:3000/user/${data.user.photoUser}`;
+    // 评论图片
+    if (data.tieziImg) {
+        data.tieziImg = `http://localhost:3000/comment/${data.tieziImg}`;
+    }
+    
+    // 判断是不是楼主
+    if (data.user.id === data.creater) {
+        isCreater.value = true;
+    }
+})
 
 // 计算评论发出时间
 data.createTimeTiezi = mathTime(data.createTimeTiezi);
