@@ -57,15 +57,19 @@
 			"style": {
 				"navigationStyle": "custom"
 			}
-		}
-		,
+		},
 		{
 			"path": "components/posting",
 			"style": {
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/enterTieba/createBar",
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}
-
 	],
 	"tabBar": {
 		"list": [

@@ -2,6 +2,7 @@
     <view class="follows">
         <view class="top">
             <text>关注的吧</text>
+            <text @click="createBarEvent">创建贴吧</text>
         </view>
 
 
@@ -35,7 +36,6 @@ const followArr = reactive<objArr[]>([]); // 贴吧数组
 const num = ref(0); // 控制显示个数
 
 const initFollows = async () => {
-    
     const data = await followTieba(user.userInfo.id) as objArr[];
     followArr.push(...data);
 
@@ -52,6 +52,13 @@ initFollows()
 const enterPostBar = (item: number) => {
     uni.navigateTo({
         url: '/components/detailPostBar?data=' + followArr[item - 1].id
+    })
+}
+
+// 创建贴吧
+const createBarEvent = () => {
+    uni.navigateTo({
+        url:'/pages/enterTieba/createBar',
     })
 }
 
@@ -82,6 +89,7 @@ onShow(() => {
 
     .top {
         display: flex;
+        align-items: center;
         justify-content: space-between;
         font-size: 13px;
         margin-bottom: 20px;

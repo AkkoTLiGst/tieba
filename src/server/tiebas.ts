@@ -25,4 +25,18 @@ export const tiebaCount = () => {
     }).then(res => res.data);
 }
 
+// 创建贴吧
+export const createTieba = (data: AnyObject) => {
+    return uni.uploadFile({
+        url: '/api/tiebas/create',
+        files: [{uri: data.file}],
+        fileType: 'image',
+        timeout: 5000,
+        formData: {
+            tiebaName: data.tiebaName,
+            aboutTieba: data.aboutTieba,
+            subscribeTieba: 0
+        }
+    }).then(res => res.data);
+}
 
