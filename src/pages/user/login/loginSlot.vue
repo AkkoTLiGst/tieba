@@ -52,9 +52,9 @@
 <script setup lang="ts">
 import { loginStore } from '@/store/login';
 import { ref, reactive } from 'vue'
-import { throttle, isEmail, isMobile } from '@/hooks/index'
+import { isEmail, isMobile } from '@/hooks/index'
 import { inject } from 'vue';
-import { login, getUser } from '@/server/login';
+import { login } from '@/server/login';
 
 
 

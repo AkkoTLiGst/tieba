@@ -2,7 +2,8 @@
     <view class="content">
         <view class="ct-title"><text>登录百度账号 精彩永相随</text></view>
 
-        <loginSlot/>
+        <loginSlot v-if="!isShowRegister"/>
+        <createUser v-if="isShowRegister"/>
         
 
         <view class="argeement">
@@ -23,13 +24,17 @@
             </view>
         </view>
 
+        <view class="register">
+            <view @click="registerEvent" v-if="!isShowRegister">注册</view>
+            <view @click="registerEvent" v-if="isShowRegister">登录</view>
+        </view>
+
     </view>
 </template>
 
 <script setup lang="ts">
-import { loginStore } from '@/store/login';
+import createUser from './createUser.vue';
 import { ref, reactive, provide } from 'vue'
-import { throttle } from '@/hooks/index'
 import loginSlot from './loginSlot.vue';
 
 const isArgee = ref<boolean>(false); // 是否同意协议
@@ -49,6 +54,13 @@ const checkboxChange = (n: any) => {
     }
 }
 
+// 是否点击了注册
+const isShowRegister = ref(false);
+
+// 注册用户
+const registerEvent = () => {
+    isShowRegister.value = !isShowRegister.value;
+}
 
 provide("isArgee", isArgee);
 provide('checkGroupVal', checkGroupVal);
@@ -63,6 +75,7 @@ provide('checkGroupVal', checkGroupVal);
     background-color: white;
     font-weight: bold;
     margin: 30px 0;
+    position: relative;
 
     .ct-title {
         padding: 60rpx 0;
@@ -92,6 +105,15 @@ provide('checkGroupVal', checkGroupVal);
             color: rgba(128, 128, 128, .4);
             font-weight: normal;
         }
+    }
+
+    .register{
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        bottom: 20px;
+        color: rgba(gray, .5);
+        font-size: 14px;
     }
 
 }

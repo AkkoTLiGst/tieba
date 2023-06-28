@@ -1,3 +1,13 @@
+// 创建用户
+export const createUser = (data: AnyObject) => {
+    return uni.request({
+        url: '/api/user/create',
+        data: {...data},
+        method: 'POST',
+        timeout: 5000
+    }).then(res => res.data);
+}
+
 // 获取用户信息
 export const getUserById = (id: number) => {
     return uni.request({
