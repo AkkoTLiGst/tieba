@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { onPageScroll, onReachBottom, onLoad, onShow } from '@dcloudio/uni-app';
+import { onPullDownRefresh, onReachBottom } from '@dcloudio/uni-app';
 import postsVue from '@/components/posts.vue'
 import { ref, provide } from 'vue'
 
@@ -17,6 +17,15 @@ provide('from', from)
 onReachBottom(() => {
     count.value = count.value + 10;
 });
+
+onPullDownRefresh(() => {
+    uni.reLaunch({
+        url: '/pages/home/index',
+        success: (success) => {
+            uni.stopPullDownRefresh();
+        },
+    })
+})
 
 </script>
 

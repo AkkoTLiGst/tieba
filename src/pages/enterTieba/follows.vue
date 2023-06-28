@@ -2,7 +2,6 @@
     <view class="follows">
         <view class="top">
             <text>关注的吧</text>
-            <text>等级排序</text>
         </view>
 
 

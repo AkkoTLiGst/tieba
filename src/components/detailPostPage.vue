@@ -102,7 +102,7 @@ import { getUserById } from '@/server/user';
 import { findAllCommentId, getComment, createComment, uploadImg } from '@/server/comment';
 import { loginStore } from '@/store/login';
 import type { tiezis, toDetailPage } from '@/types/types';
-import { onLoad, onShow } from '@dcloudio/uni-app';
+import { onLoad, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
 import { ref, reactive, watchEffect } from 'vue'
 import { isLike, likePost } from '@/server/login';
 import { getTieziById } from '@/server/tiezi';
@@ -199,7 +199,7 @@ watchEffect(() => {
         } else {
             btnDisabled.value = true;
         }
-    }, 300, {first: true, end: true})();
+    }, 300, { first: true, end: true })();
 })
 
 // 是否显示发表评论
@@ -269,48 +269,52 @@ const postLike = async () => {
     }
 }
 
+const getInfo = reactive({});
+
+const initDetail = async (getInfo: any) => {
+    // 获取帖子
+    const getTiezi: tiezis = await getTieziById(getInfo.id) as tiezis;
+    Object.assign(tiezi, getTiezi);
+    if (getTiezi.tieziImg) {
+        tiezi.url = `http://localhost:3000/tiezi/${getTiezi.tieziImg}`;
+    }
+    tiezi.tiebaName = getInfo.tiebaName;
+    tiezi.tiebaImg = getInfo.tiebaImg;
+    tiezi.createTimeTiezi = getInfo.createTime;
+
+    // 获取发帖用户信息
+    const usr = await getUserById(tiezi.createrId) as AnyObject;
+    creater.createrId = usr.id;
+    creater.createrName = usr.userName;
+    creater.createrImg = 'http://localhost:3000/user/' + usr.photoUser;
+
+    // 如果登录了，获取登录用户是否点赞了当前帖子
+    if (user.isLogin) {
+        const data = await isLike(user.userInfo.id, tiezi.id) as AnyObject;
+
+        if (data.isLike) {
+            like.value = data.isLike;
+        }
+    }
+
+
+    // 获取评论ID数组
+    const commentId: number[] = await getAllCommentId() as number[];
+
+    // 获取所有评论
+    await pushComment(commentId);
+    
+    return true;
+}
+
 const statusBarHeight = ref(0); // 给topbar定位
 onLoad((e) => {
     // 给topbar定位
     statusBarHeight.value = uni.getSystemInfoSync().statusBarHeight as number || 44;
 
-    const getInfo = JSON.parse(decodeURIComponent(e!.data));
+    Object.assign(getInfo, JSON.parse(decodeURIComponent(e!.data)));
 
-    const initDetail = async () => {
-        // 获取帖子
-        const getTiezi: tiezis = await getTieziById(getInfo.id) as tiezis;
-        Object.assign(tiezi, getTiezi);
-        if (getTiezi.tieziImg) {
-            tiezi.url = `http://localhost:3000/tiezi/${getTiezi.tieziImg}`;
-        }
-        tiezi.tiebaName = getInfo.tiebaName;
-        tiezi.tiebaImg = getInfo.tiebaImg;
-        tiezi.createTimeTiezi = getInfo.createTime;
-
-        // 获取发帖用户信息
-        const usr = await getUserById(tiezi.createrId) as AnyObject;
-        creater.createrId = usr.id;
-        creater.createrName = usr.userName;
-        creater.createrImg = 'http://localhost:3000/user/' + usr.photoUser;
-
-        // 如果登录了，获取登录用户是否点赞了当前帖子
-        if (user.isLogin) {
-            const data = await isLike(user.userInfo.id, tiezi.id) as AnyObject;
-
-            if (data.isLike) {
-                like.value = data.isLike;
-            }
-        }
-
-
-        // 获取评论ID数组
-        const commentId: number[] = await getAllCommentId() as number[];
-
-        // 获取所有评论
-        await pushComment(commentId);
-    }
-
-    initDetail();
+    initDetail(getInfo);
 });
 onShow(() => {
     // 如果没有登录跳转登录界面

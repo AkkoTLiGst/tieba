@@ -54,7 +54,7 @@
     </view>
 </template>
 <script setup lang="ts">
-import { onLoad, onReachBottom } from '@dcloudio/uni-app';
+import { onLoad, onPullDownRefresh, onReachBottom } from '@dcloudio/uni-app';
 import { tiebaById } from '@/server/tiebas'
 import { getPostByTieba, getPostCount } from '@/server/tiezi'
 import { isSubscribe, subTieba } from '@/server/login'
@@ -200,7 +200,25 @@ onReachBottom(() => {
     if (tiebaInfo.postCount === tieziArr.length) {
         isAllPost.value = true;
     }
+});
+
+
+
+// 下拉刷新函数
+const refreshEvent = () => {
+    tieziArr.length = 0; // 清空数组
+    initTieba();
+    initTiezi();
+    return true
+}
+
+onPullDownRefresh(() => {
+    if(refreshEvent()){
+        uni.stopPullDownRefresh();
+    }
+
 })
+
 </script>
 
 <style scoped lang="scss">

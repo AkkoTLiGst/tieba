@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { loginStore } from '@/store/login';
 import postsVue from '@/components/posts.vue'
-import { onReachBottom } from '@dcloudio/uni-app';
+import { onPullDownRefresh, onReachBottom } from '@dcloudio/uni-app';
 import { provide, ref, reactive } from 'vue'
 
 const from = 'user';
@@ -20,16 +20,20 @@ const tieziidLength = user.userInfo.tiezisID.length; // 帖子总数量
 
 const list = reactive<number[]>([]); // 用于从tiezisID中取出一部分显示在页面
 
-// 帖子数量小于10的时候列出所有帖子，帖子数量大于10的时候列出前十个
-if (tieziidLength <= 10) {
-    for (let i = 0; i < tieziidLength; i++) {
-        list.push(user.userInfo.tiezisID[i])
-    }
-} else {
-    for (let i = 0; i < 10; i++) {
-        list.push(user.userInfo.tiezisID[i])
+//初始化帖子
+const initPosts = () => {
+    // 帖子数量小于10的时候列出所有帖子，帖子数量大于10的时候列出前十个
+    if (tieziidLength <= 10) {
+        for (let i = 0; i < tieziidLength; i++) {
+            list.push(user.userInfo.tiezisID[i])
+        }
+    } else {
+        for (let i = 0; i < 10; i++) {
+            list.push(user.userInfo.tiezisID[i])
+        }
     }
 }
+initPosts();
 
 onReachBottom(() => {
     // 每次下拉多显示10个帖子
@@ -49,6 +53,19 @@ onReachBottom(() => {
     }
 });
 
+// 下拉刷新
+const refreshEvent = () => {
+    list.length = 0; // 清空帖子
+    initPosts();
+    return true;
+}
+
+onPullDownRefresh(() => {
+    if(refreshEvent()){
+        uni.stopPullDownRefresh();
+    }
+})
+
 </script>
 
 <style scoped lang="scss">
@@ -57,9 +74,9 @@ page {
 }
 
 .mypostsIndex {
-    padding: 0 10px;    
+    padding: 0 10px;
 
-    .alert{
+    .alert {
         margin-top: 60px;
     }
 }
