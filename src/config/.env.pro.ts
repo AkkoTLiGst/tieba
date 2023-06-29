@@ -1,3 +1,3 @@
 export default{
-    BASE_API: "https://api.ibukisuika.com/"
+    BASE_API: "https://api.ibukisuika.com"
 }
