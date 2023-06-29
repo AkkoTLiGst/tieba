@@ -10,7 +10,7 @@
         <view class="content">
             <view class="ba" v-for="(item, index) in arr" :index="index">
                 <view>
-                    <image :src="`http://localhost:3000/tiebas/${item.photoTieba}`" />
+                    <image :src="`${ENV_VAR.BASE_API}/tiebas/${item.photoTieba}`" />
                     <text>{{ item.tiebaName }}吧</text>
                 </view>
 
@@ -21,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+import ENV_VAR from '@/config/env';
 import { tiebaById, tiebaCount } from '@/server/tiebas';
 import { reactive } from 'vue';
 

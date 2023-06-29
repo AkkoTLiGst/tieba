@@ -38,7 +38,7 @@
         <u-popup :show="isShowPop" mode="center" @close="closePopup"
             :overlayStyle="{ backgroundColor: 'rgba(128,128,128, .1)' }">
             <view class="popup">
-                <image mode="aspectFit" src="http://localhost:3000/img_popup.png"></image>
+                <image mode="aspectFit" :src="`${ENV_CONFIG.BASE_API}/img_popup.png`"></image>
                 <text>继续操作需要登录贴吧账号</text>
                 <text @click="userLoginEvent">立即登录</text>
                 <u-button type="primary">打开APP</u-button>
@@ -56,6 +56,8 @@ import type { tiezis, toDetailPage } from '@/types/types'
 import { loginStore } from '@/store/login';
 import { onShow } from '@dcloudio/uni-app';
 import { mathTime } from '@/hooks';
+import ENV_CONFIG from '@/config/env';
+import ENV_VAR from '@/config/env';
 
 const user = loginStore(); // 用户信息
 
@@ -102,7 +104,7 @@ const fromHome = async () => {
     // 获取贴吧信息
     const getTieba: AnyObject = await tiebaById(id) as AnyObject;
     Object.assign(tiebas, getTieba)
-    tiebas.url = `http://localhost:3000/tiebas/${getTieba.photoTieba}`;
+    tiebas.url = `${ENV_VAR.BASE_API}/tiebas/${getTieba.photoTieba}`;
 
 
     const getTiezi = await randomTieziTB(tiebas.id) as AnyObject;
@@ -127,7 +129,7 @@ const fromUser = async () => {
     // 根据帖子的创建贴吧id返回贴吧信息
     const getTieba: AnyObject = await tiebaById(getTiezi.ctieBaId) as AnyObject;
     Object.assign(tiebas, getTieba)
-    tiebas.url = `http://localhost:3000/tiebas/${getTieba.photoTieba}`;
+    tiebas.url = `${ENV_VAR.BASE_API}/tiebas/${getTieba.photoTieba}`;
 
     // 判断是否点赞
     const isLikeData = await isLike(user.userInfo.id, tiezi.id) as AnyObject;
@@ -214,7 +216,7 @@ const showInfo = async () => {
 
     // 设置帖子图片
     if (getTiezi.tieziImg) {
-        tiezi.url = `http://localhost:3000/tiezi/${getTiezi.tieziImg}`;
+        tiezi.url = `${ENV_VAR.BASE_API}/tiezi/${getTiezi.tieziImg}`;
     }
 
 

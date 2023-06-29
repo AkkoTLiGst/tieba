@@ -109,6 +109,7 @@ import { getTieziById } from '@/server/tiezi';
 import posts from './posts.vue';
 import detailCommentVue from './detailComment.vue';
 import { rollback, debounce } from '@/hooks';
+import ENV_VAR from '@/config/env';
 
 const user = loginStore();
 
@@ -276,7 +277,7 @@ const initDetail = async (getInfo: any) => {
     const getTiezi: tiezis = await getTieziById(getInfo.id) as tiezis;
     Object.assign(tiezi, getTiezi);
     if (getTiezi.tieziImg) {
-        tiezi.url = `http://localhost:3000/tiezi/${getTiezi.tieziImg}`;
+        tiezi.url = `${ENV_VAR.BASE_API}/tiezi/${getTiezi.tieziImg}`;
     }
     tiezi.tiebaName = getInfo.tiebaName;
     tiezi.tiebaImg = getInfo.tiebaImg;
@@ -286,7 +287,7 @@ const initDetail = async (getInfo: any) => {
     const usr = await getUserById(tiezi.createrId) as AnyObject;
     creater.createrId = usr.id;
     creater.createrName = usr.userName;
-    creater.createrImg = 'http://localhost:3000/user/' + usr.photoUser;
+    creater.createrImg = `${ENV_VAR.BASE_API}/user/` + usr.photoUser;
 
     // 如果登录了，获取登录用户是否点赞了当前帖子
     if (user.isLogin) {

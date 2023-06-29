@@ -1,9 +1,11 @@
+import ENV_CONFIG from '@/config/env';
+
 // 创建用户
 export const createUser = (data: AnyObject) => {
     return uni.request({
-        url: '/api/user/create',
+        url: `${ENV_CONFIG.BASE_API}/user/create`,
         data: {...data},
-        method: 'POST',
+        method: `POST`,
         timeout: 5000
     }).then(res => res.data);
 }
@@ -11,11 +13,11 @@ export const createUser = (data: AnyObject) => {
 // 获取用户信息
 export const getUserById = (id: number) => {
     return uni.request({
-        url: '/api/user/findById',
+        url: `${ENV_CONFIG.BASE_API}/user/findById`,
         data: {
             id
         },
-        method: 'GET',
+        method: `GET`,
         timeout: 5000,
     }).then(res => res.data)
 }   
@@ -23,8 +25,8 @@ export const getUserById = (id: number) => {
 // 获取未登录用户的帖子
 export const userPosts  = (id: number, page: number, pageSize: number) => {
     return uni.request({
-        url: '/api/user/userPost',
-        method: 'GET',
+        url: `${ENV_CONFIG.BASE_API}/user/userPost`,
+        method: `GET`,
         data:{id, page, pageSize},
         timeout: 5000
     }).then(res => res.data);
@@ -33,10 +35,10 @@ export const userPosts  = (id: number, page: number, pageSize: number) => {
 // 更新用户头像
 export const uploadImg = (id: number, file: string) => {
     return uni.uploadFile({
-        url: '/api/user/uploadUserImg',
-        fileType: 'image',
+        url: `${ENV_CONFIG.BASE_API}/user/uploadUserImg`,
+        fileType: `image`,
         filePath: file,
-        name: 'file',
+        name: `file`,
         formData: {id}
     }).then(res => res.data);
 }

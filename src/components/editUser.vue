@@ -77,7 +77,7 @@ const saveEvent = async () => {
         // 更新用户信息
         Object.assign(user, data);
         userLogin.updateUserInfo(user);
-        user.photoUser = newUrl(user.photoUser, 'user')
+        user.photoUser = newUrl(user.photoUser, 'user');
     }
 
 }
@@ -87,7 +87,6 @@ onLoad((e) => {
     statusBarHeight.value = uni.getSystemInfoSync().statusBarHeight as number || 44;
 
     Object.assign(user, userLogin.userInfo);
-    user.photoUser = newUrl(user.photoUser, 'user');
 });
 
 </script>

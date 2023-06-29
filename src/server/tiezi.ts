@@ -1,8 +1,9 @@
+import ENV_CONFIG from '@/config/env';
 // 发表帖子
 export const createPost = (post: object) => {
     return uni.request({
-        url: `/api/tiezi/create`,
-        method: 'POST',
+        url: `${ENV_CONFIG.BASE_API}/tiezi/create`,
+        method: `POST`,
         data: { ...post },
         timeout: 5000
     }).then(res => res.data);
@@ -11,8 +12,8 @@ export const createPost = (post: object) => {
 // 随机获取帖子
 export const randomTieziTB = (tiebaId: number) => {
     return uni.request({
-        url: `/api/tiezi/randomTieziTB/${tiebaId}`,
-        method: 'GET',
+        url: `${ENV_CONFIG.BASE_API}/tiezi/randomTieziTB/${tiebaId}`,
+        method: `GET`,
         timeout: 5000
     }).then(res => res.data);
 }
@@ -20,7 +21,7 @@ export const randomTieziTB = (tiebaId: number) => {
 // 通过帖子id获取
 export const getTieziById = (tieziID: number) => {
     return uni.request({
-        url: `/api/tiezi/getTieziById`,
+        url: `${ENV_CONFIG.BASE_API}/tiezi/getTieziById`,
         data: { tieziID },
         timeout: 5000
     }).then(res => res.data);
@@ -29,7 +30,7 @@ export const getTieziById = (tieziID: number) => {
 // 获取对应贴吧的对应个数帖子
 export const getPostByTieba = (tiebaId: number, page: number, pageSize: number) => {
     return uni.request({
-        url: '/api/tiezi/allPost',
+        url: `${ENV_CONFIG.BASE_API}/tiezi/allPost`,
         data: { id: tiebaId, page, pageSize },
         timeout: 5000
     }).then(res => res.data);
@@ -38,7 +39,7 @@ export const getPostByTieba = (tiebaId: number, page: number, pageSize: number) 
 // 获取对应贴吧的帖子数量
 export const getPostCount = (tiebaId: number) => {
     return uni.request({
-        url: '/api/tiezi/postCount',
+        url: `${ENV_CONFIG.BASE_API}/tiezi/postCount`,
         data: { id: tiebaId },
         timeout: 5000
     }).then(res => res.data);

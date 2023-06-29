@@ -3,6 +3,7 @@ import { names } from '../storeName'
 import { reactive, ref } from 'vue'
 import type { User } from '@/types/types';
 import { getTokenTiezi, getUser } from '@/server/login';
+import ENV_VAR from '@/config/env';
 
 export const loginStore = defineStore(
     names.Login,
@@ -44,12 +45,14 @@ export const loginStore = defineStore(
         async function setUserInfo() {
             const data = await getUser() as AnyObject;
             
+            data.photoUser = ENV_VAR.BASE_API + '/user/' + data.photoUser;
             Object.assign(userInfo, data);
         }
 
         // 更新用户信息
         function updateUserInfo(user: User) {
             Object.assign(userInfo, user);
+            userInfo.photoUser = ENV_VAR.BASE_API + '/user/' + userInfo.photoUser;
         }
 
 

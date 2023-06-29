@@ -1,7 +1,9 @@
+import ENV_CONFIG from '@/config/env';
+
 // 通过吧名获取贴吧信息
 export const tiebaByName = (name: string) => {
     return uni.request({
-        url: `/api/tiebas/tiebaByName/${name}`,
+        url: `${ENV_CONFIG.BASE_API}/tiebas/tiebaByName/${name}`,
         method: 'GET',
         timeout: 5000
     }).then(res => res.data);
@@ -10,7 +12,7 @@ export const tiebaByName = (name: string) => {
 // 通过id获取贴吧信息
 export const tiebaById = (num: number) => {
     return uni.request({
-        url: `/api/tiebas/tiebaById/${num}`,
+        url: `${ENV_CONFIG.BASE_API}/tiebas/tiebaById/${num}`,
         method: 'GET',
         timeout: 5000
     }).then(res => res.data);
@@ -19,7 +21,7 @@ export const tiebaById = (num: number) => {
 // 获取贴吧总数
 export const tiebaCount = () => {
     return uni.request({
-        url: '/api/tiebas/count',
+        url: `${ENV_CONFIG.BASE_API}/tiebas/count`,
         method: 'GET',
         timeout: 5000
     }).then(res => res.data);
@@ -28,7 +30,7 @@ export const tiebaCount = () => {
 // 创建贴吧
 export const createTieba = (data: AnyObject) => {
     return uni.uploadFile({
-        url: '/api/tiebas/create',
+        url: `${ENV_CONFIG.BASE_API}/tiebas/create`,
         files: [{uri: data.file}],
         fileType: 'image',
         timeout: 5000,

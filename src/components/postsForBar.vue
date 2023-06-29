@@ -108,13 +108,17 @@ const like = async () => {
         const a = await likePost(user.userInfo.id, tiezi.id, 'like');
 
         const getTiezi: tiezis = await getTieziById(tiezi.id) as tiezis;
+        const time = tiezi.createTimeTiezi;
         Object.assign(tiezi, getTiezi);
+        tiezi.createTimeTiezi = time;
         userIsLike.value = true;
     } else {
         const a = await likePost(user.userInfo.id, tiezi.id, 'unlike');
 
         const getTiezi: tiezis = await getTieziById(tiezi.id) as tiezis;
+        const time = tiezi.createTimeTiezi;
         Object.assign(tiezi, getTiezi);
+        tiezi.createTimeTiezi = time;
         userIsLike.value = false;
     }
 

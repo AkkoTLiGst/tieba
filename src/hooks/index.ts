@@ -1,3 +1,5 @@
+import ENV_VAR from "@/config/env";
+
 /**
 * 函数节流
 * @param fn 节流方法
@@ -153,7 +155,7 @@ export const getImage = (url: string, canvasId: string, reactiveData: any) => {
  */
 export const newUrl = (imgName: string, from: string) => {
     if (imgName) {
-        return `/api/${from}/${imgName}`;
+        return `${ENV_VAR.BASE_API}/${from}/${imgName}`;
     } else {
         return '';
     }
