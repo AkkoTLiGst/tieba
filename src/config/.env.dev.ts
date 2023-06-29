@@ -1,3 +1,3 @@
 export default{
-    BASE_API: "/api"
+    BASE_API: "http://localhost:30605"
 }

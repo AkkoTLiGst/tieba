@@ -81,70 +81,66 @@ export function isMobile(str: string): boolean {
 
 /**
  * 根据图片绘制canvas并获取其主题色
- * @param url 图片链接
+ * @param url 图片base64
  * @param canvasId canvas元素的canvasid
  * @param reactiveData 响应式reactive对象，用来保存主题色
  */
 export const getImage = (url: string, canvasId: string, reactiveData: any) => {
-    // 获得图片信息
-    uni.getImageInfo({
-        src: url,
-        success(res) {
-            let imgHeight = 54;
-            let imgWidth = 54;
-            let ctx = uni.createCanvasContext(canvasId) // 使用画布创建上下文 图片
-            ctx.drawImage(res.path, 0, 0, 54, 54) // 设置图片坐标及大小，括号里面的分别是（图片路径，x坐标，y坐标，width，height）
-            ctx.save(); //保存
-            ctx.draw(true, () => {
-                uni.canvasGetImageData({
-                    canvasId: canvasId,
-                    x: 0,
-                    y: 0,
-                    width: 54,
-                    height: 54,
-                    success: (res) => {
-                        let data = res.data;
+    // 通过base64绘制和获取
+    let imgHeight = 54;
+    let imgWidth = 54;
+    let ctx = uni.createCanvasContext(canvasId) // 使用画布创建上下文 图片
+    ctx.drawImage(url, 0, 0, 54, 54) // 设置图片坐标及大小，括号里面的分别是（图片路径，x坐标，y坐标，width，height）
+    ctx.save(); //保存
+    ctx.draw(true, () => {
+        uni.canvasGetImageData({
+            canvasId: canvasId,
+            x: 0,
+            y: 0,
+            width: 54,
+            height: 54,
+            success: (res) => {
+                let data = res.data;
 
-                        let arr = []
-                        let r = 1,
-                            g = 1,
-                            b = 1;
-                        // 取所有像素的平均值
-                        for (let row = 0; row < imgHeight; row++) {
-                            for (let col = 0; col < imgWidth; col++) {
-                                if (row == 0) {
-                                    r += data[((imgWidth * row) + col)];
-                                    g += data[((imgWidth * row) + col) + 1];
-                                    b += data[((imgWidth * row) + col) + 2];
-                                    arr.push([r, g, b])
-                                } else {
-                                    r += data[((imgWidth * row) + col) * 4];
-                                    g += data[((imgWidth * row) + col) * 4 + 1];
-                                    b += data[((imgWidth * row) + col) * 4 + 2];
-                                    arr.push([r, g, b])
-                                }
-                            }
+                let arr = []
+                let r = 1,
+                    g = 1,
+                    b = 1;
+                // 取所有像素的平均值
+                for (let row = 0; row < imgHeight; row++) {
+                    for (let col = 0; col < imgWidth; col++) {
+                        if (row == 0) {
+                            r += data[((imgWidth * row) + col)];
+                            g += data[((imgWidth * row) + col) + 1];
+                            b += data[((imgWidth * row) + col) + 2];
+                            arr.push([r, g, b])
+                        } else {
+                            r += data[((imgWidth * row) + col) * 4];
+                            g += data[((imgWidth * row) + col) * 4 + 1];
+                            b += data[((imgWidth * row) + col) * 4 + 2];
+                            arr.push([r, g, b])
                         }
-                        // 求取平均值
-                        r /= (imgWidth * imgHeight);
-                        g /= (imgWidth * imgHeight);
-                        b /= (imgWidth * imgHeight);
-                        // 将最终的值取整
-                        r = Math.round(r);
-                        g = Math.round(g);
-                        b = Math.round(b);
-
-                        Object.assign(reactiveData, { r, g, b })
-                    },
-                    fail: (fail) => {
-                        console.log(fail)
                     }
-                })
+                }
+                // 求取平均值
+                r /= (imgWidth * imgHeight);
+                g /= (imgWidth * imgHeight);
+                b /= (imgWidth * imgHeight);
+                // 将最终的值取整
+                r = Math.round(r);
+                g = Math.round(g);
+                b = Math.round(b);
 
-            })
+                Object.assign(reactiveData, { r, g, b })
+            },
+            fail: (fail) => {
+                console.log(fail)
+            }
+        })
 
-        }
-    });
+    })
+
+
 }
 
 /**

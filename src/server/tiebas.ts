@@ -42,3 +42,13 @@ export const createTieba = (data: AnyObject) => {
     }).then(res => res.data);
 }
 
+// 获取头像blob
+export const stream = (imgName: string) => {
+    return uni.request({
+        url: `${ENV_CONFIG.BASE_API}/tiebas/Stream`,
+        method: 'GET',
+        data: {imgName},
+        responseType: 'arraybuffer',
+        timeout: 5000
+    }).then(res => res.data);
+}

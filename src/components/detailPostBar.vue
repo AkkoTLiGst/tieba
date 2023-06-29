@@ -41,21 +41,17 @@
             <view class="end" v-if="isAllPost">已加载完所有帖子</view>
         </view>
 
-        <view class="posting" @click="postingEvent"
-            v-show="postingShow"
-            :style="
-                { 
-                    backgroundColor: `rgb(${themeColor.r}, ${themeColor.g}, ${themeColor.b})` ,
-                    transform: `translateX(${postingLeft}px)`
-                }"
-        >
+        <view class="posting" @click="postingEvent" v-show="postingShow" :style="{
+                backgroundColor: `rgb(${themeColor.r}, ${themeColor.g}, ${themeColor.b})`,
+                transform: `translateX(${postingLeft}px)`
+            }">
             <u-icon name="plus" color="white" size="25"></u-icon>
         </view>
     </view>
 </template>
 <script setup lang="ts">
 import { onLoad, onPullDownRefresh, onReachBottom } from '@dcloudio/uni-app';
-import { tiebaById } from '@/server/tiebas'
+import { stream, tiebaById } from '@/server/tiebas'
 import { getPostByTieba, getPostCount } from '@/server/tiezi'
 import { isSubscribe, subTieba } from '@/server/login'
 import postsForBar from '@/components/postsForBar.vue'
@@ -89,13 +85,23 @@ const tiebaInfo = reactive<tieba>({
     createTimeTieba: '',
     postCount: 0
 });
+
+
 // 初始化贴吧信息
 const initTieba = async () => {
     const getTieba = await tiebaById(tiebaId) as tieba;
     Object.assign(tiebaInfo, getTieba);
-    tiebaInfo.photoTieba = newUrl(tiebaInfo.photoTieba, 'tiebas'); // 拼串图片
+
+    // 从后端获取对应贴吧头像的流
+    const a = await stream(tiebaInfo.photoTieba) as ArrayBuffer;
+    // 将流转换为base64
+    const base64 = uni.arrayBufferToBase64(a);
+    const imgUrl = 'data:image/png;base64,' + base64;
+    
     // 绘制canvas，获取主题色
-    getImage(tiebaInfo.photoTieba, 'logo', themeColor);
+    getImage(imgUrl, 'logo', themeColor);
+
+    tiebaInfo.photoTieba = newUrl(tiebaInfo.photoTieba, 'tiebas'); // 拼串图片
 
     // 获取当前贴吧的帖子总数
     const countData = await getPostCount(tiebaId) as { data: number, code: number, message: string };
@@ -213,7 +219,7 @@ const refreshEvent = () => {
 }
 
 onPullDownRefresh(() => {
-    if(refreshEvent()){
+    if (refreshEvent()) {
         uni.stopPullDownRefresh();
     }
 
