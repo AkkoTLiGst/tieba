@@ -1,4 +1,4 @@
-<!-- 显示贴吧头像的帖子 -->
+<!-- 显示顶部是贴吧头像的帖子 -->
 <template>
     <view class="hm-recommend">
         <view class="top">
@@ -35,7 +35,7 @@
             </view>
         </view>
 
-        <u-popup :show="isShowPop" mode="center" @close="closePopup"
+        <u-popup :show="isShowPop" mode="center" :custom-style="{maxWidth: '300px'}" @close="closePopup"
             :overlayStyle="{ backgroundColor: 'rgba(128,128,128, .1)' }">
             <view class="popup">
                 <image mode="aspectFit" :src="`${ENV_CONFIG.BASE_API}/img_popup.png`"></image>

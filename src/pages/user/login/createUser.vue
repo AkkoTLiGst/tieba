@@ -37,6 +37,13 @@
                     input-align="center" :customStyle="inputStyle" v-model="userInputInfo.password"></u-input>
                 <text v-if="isShowError">两次密码不同</text>
             </view>
+
+            <text>请选择头像:</text>
+            <view class="avatar">
+                <view @click="chooseAvatarEvent">
+                    <u-avatar size="60"  :src="userInputInfo.file"></u-avatar>
+                </view>
+            </view>
         </view>
 
 
@@ -86,7 +93,8 @@ const userInputInfo = reactive({
     userName: '',
     password: '',
     email: '',
-    mobile: ''
+    mobile: '',
+    file: ''
 });
 
 // 确认密码
@@ -104,6 +112,7 @@ watchEffect((event) => {
     userInputInfo.userId;
     userInputInfo.mobile;
     userInputInfo.password;
+    userInputInfo.file;
 
     event(() => {
         // 如果点击下一步，就不进行if里的逻辑，进行else里的逻辑
@@ -111,11 +120,11 @@ watchEffect((event) => {
             // 判断手机号格式是否正确
             if (!isMobile(userInputInfo.mobile) && userInputInfo.mobile.length > 0) {
                 mobileError.value = true
-            }else{mobileError.value = false}
+            } else { mobileError.value = false }
             // 判断邮箱格式是否正确
             if (!isEmail(userInputInfo.email) && userInputInfo.email.length > 0) {
                 emialError.value = true
-            }else{emialError.value = false}
+            } else { emialError.value = false }
 
             // 判断是不是输入全了除密码外的用户信息
             if (isEmail(userInputInfo.email) && isMobile(userInputInfo.mobile) && userInputInfo.userId && userInputInfo.userName) {
@@ -125,8 +134,10 @@ watchEffect((event) => {
             // 判断两次密码是否相同
             if (userInputInfo.password.length > 0 && password.value) {
                 if (userInputInfo.password === password.value) {
-                    isChickBtn.value = false;
-                    isShowError.value = false;
+                    isShowError.value = false; // 密码相同，隐藏报错
+                    if (userInputInfo.file) { // 密码相同的情况下，选择了头像才能注册
+                        isChickBtn.value = false;
+                    }
                 } else {
                     isShowError.value = true;
                 }
@@ -147,9 +158,9 @@ const nextEvent = () => {
 const registerEvent = async () => {
     // 如果同意协议
     if (isArgee.value) {
-        const a = await createUser(userInputInfo) as { message: string, code: number };
-
-        if (a.code === 200) {
+        const a = await createUser(userInputInfo);
+        const data: {code: number} = JSON.parse(a);
+        if (data.code === 200) {
             isChickBtn.value = true;
             uni.showToast({
                 title: '创建成功',
@@ -161,6 +172,19 @@ const registerEvent = async () => {
             })
         }
     }
+}
+
+// 选择头像事件
+const chooseAvatarEvent = () => {
+    
+    uni.chooseImage({
+        count: 1,
+        sourceType: ['album'],
+        success: (res) => {
+            const img = res.tempFilePaths as string[];
+            userInputInfo.file = img[0];
+        }
+    })
 }
 
 </script>
@@ -209,6 +233,12 @@ const registerEvent = async () => {
                 font-size: 11px;
             }
         }
+
+        .avatar {
+            display: flex;
+            justify-content: center;
+        }
     }
+
 }
 </style>

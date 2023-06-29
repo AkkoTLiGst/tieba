@@ -2,11 +2,14 @@ import ENV_CONFIG from '@/config/env';
 
 // 创建用户
 export const createUser = (data: AnyObject) => {
-    return uni.request({
+    return uni.uploadFile({
         url: `${ENV_CONFIG.BASE_API}/user/create`,
-        data: {...data},
-        method: `POST`,
-        timeout: 5000
+        files: [{ uri: data.file }],
+        fileType: 'image',
+        timeout: 5000,
+        formData: {
+            ...data
+        }
     }).then(res => res.data);
 }
 
@@ -20,14 +23,14 @@ export const getUserById = (id: number) => {
         method: `GET`,
         timeout: 5000,
     }).then(res => res.data)
-}   
+}
 
 // 获取未登录用户的帖子
-export const userPosts  = (id: number, page: number, pageSize: number) => {
+export const userPosts = (id: number, page: number, pageSize: number) => {
     return uni.request({
         url: `${ENV_CONFIG.BASE_API}/user/userPost`,
         method: `GET`,
-        data:{id, page, pageSize},
+        data: { id, page, pageSize },
         timeout: 5000
     }).then(res => res.data);
 }
@@ -39,7 +42,7 @@ export const uploadImg = (id: number, file: string) => {
         fileType: `image`,
         filePath: file,
         name: `file`,
-        formData: {id}
+        formData: { id }
     }).then(res => res.data);
 }
 

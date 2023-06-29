@@ -31,7 +31,7 @@ import { ref, reactive } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import { debounce, rollback } from '@/hooks';
 import { watchEffect } from 'vue';
-import { createTieba } from '@/server/tiebas'
+import { createTieba, tiebaByName } from '@/server/tiebas'
 
 // 贴吧信息
 const createBarInfo = reactive({
@@ -70,14 +70,25 @@ const avatarEvent = () => {
 
 // 创建贴吧
 const createBarEvent = async () => {
-    const a = await createTieba(createBarInfo) as unknown as {message: string, code: number};
-    if(a.code === 200){
+    const a = await createTieba(createBarInfo);
+    const data: { code: number, message: string } = JSON.parse(a); // 返回的是一个JOSN，需要转换
+    const tiebaId = await tiebaByName(createBarInfo.tiebaName) as AnyObject; // 通过吧名获取ID，跳转到贴吧详情页用
+    
+    if (data.code === 200) {
         createBarInfo.aboutTieba = '';
         createBarInfo.file = '';
         createBarInfo.tiebaName = '';
-        uni.showToast({title: '创建成功'});
-    }else{
-        uni.showToast({title: a.message, icon: 'fail'});
+        uni.showToast({
+             title: '创建成功，跳转到贴吧' ,
+             success: () => {
+                uni.redirectTo({
+                    url: '/components/detailPostBar?data=' + tiebaId.id,
+                });
+             }
+            });
+
+    } else {
+        uni.showToast({ title: data.message, icon: 'fail' });
 
     }
 }
