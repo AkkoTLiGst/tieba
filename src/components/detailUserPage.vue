@@ -6,7 +6,7 @@
 
         <view class="userMsg">
             <view class="top">
-                <image :src="user.photoUser" mode="scaleToFill" />
+                <image lazy-load="true"  :src="user.photoUser" mode="scaleToFill" />
                 <view v-if="user.id === loginUser.userInfo.id" @click="editUserEvent">编辑资料</view>
             </view>
 

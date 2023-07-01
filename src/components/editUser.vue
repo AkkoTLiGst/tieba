@@ -7,7 +7,7 @@
         </view>
 
         <view class="img">
-            <image :src="user.photoUser" mode="scaleToFill" />
+            <image lazy-load="true"  :src="user.photoUser" mode="scaleToFill" />
             <view @click="chooseImgEvent" class="chooseImg"><u-icon name="photo" color="white" size="30"></u-icon></view>
         </view>
 
@@ -78,6 +78,10 @@ const saveEvent = async () => {
         Object.assign(user, data);
         userLogin.updateUserInfo(user);
         user.photoUser = newUrl(user.photoUser, 'user');
+
+        uni.showToast({
+            title: '保存成功'
+        })
     }
 
 }

@@ -2,7 +2,7 @@
 <template>
     <view class="hm-recommend">
         <view class="top">
-            <image :src="tiebas.url" lazy-load="true" @click="detailPostBar" />
+            <image lazy-load="true"  :src="tiebas.url" @click="detailPostBar" />
             <view @click="detailPostBar">
                 <text>{{ tiebas.tiebaName }}吧</text>
                 <text>{{ tiezi.time }} </text>
@@ -14,7 +14,7 @@
             <text>{{ tiezi.content }}</text>
         </view>
 
-        <image @click="detailPage" v-if="tiezi.url" :src="tiezi.url" mode="widthFix" />
+        <image lazy-load="true"  @click="detailPage" v-if="tiezi.url" :src="tiezi.url" mode="widthFix" />
 
         <view class="footer">
             <view @click="collection">
@@ -38,7 +38,7 @@
         <u-popup :show="isShowPop" mode="center" :custom-style="{maxWidth: '300px'}" @close="closePopup"
             :overlayStyle="{ backgroundColor: 'rgba(128,128,128, .1)' }">
             <view class="popup">
-                <image mode="aspectFit" :src="`${ENV_CONFIG.BASE_API}/img_popup.png`"></image>
+                <image lazy-load="true"  mode="aspectFit" :src="`${ENV_CONFIG.BASE_API}/img_popup.png`"></image>
                 <text>继续操作需要登录贴吧账号</text>
                 <text @click="userLoginEvent">立即登录</text>
                 <u-button type="primary">打开APP</u-button>

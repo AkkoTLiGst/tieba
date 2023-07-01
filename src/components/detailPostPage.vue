@@ -3,7 +3,7 @@
         <view class="topBar" :style="{ height: statusBarHeight + 'px' }">
             <u-icon @click="rollback" name="arrow-left" :custom-style="{ width: '56px' }" size="20" color="black"></u-icon>
             <view @click="enterPostBar">
-                <image :src="tiezi.tiebaImg" mode="scaleToFill" />
+                <image lazy-load="true"  :src="tiezi.tiebaImg" mode="scaleToFill" />
                 <text>{{ tiezi.tiebaName }}吧 </text>
             </view>
             <text>打开贴吧</text>
@@ -11,7 +11,7 @@
         <view class="threadStarter">
             <view class="title">{{ tiezi.threadTitle }}</view>
             <view class="user">
-                <image @click="toDetailUserPage" :src="creater.createrImg" mode="scaleToFill" />
+                <image lazy-load="true"  @click="toDetailUserPage" :src="creater.createrImg" mode="scaleToFill" />
                 <view @click="toDetailUserPage">
                     <text>{{ creater.createrName }}</text>
                     <text>{{ tiezi.createTimeTiezi }}</text>
@@ -20,7 +20,7 @@
             <view class="content">
                 {{ tiezi.content }}
             </view>
-            <image v-if="tiezi.url" :src="tiezi.url" mode="widthFix" />
+            <image lazy-load="true"  v-if="tiezi.url" :src="tiezi.url" mode="widthFix" />
 
             <view class="interactionBar">
                 <view>

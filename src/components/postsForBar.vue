@@ -2,7 +2,7 @@
 <template>
     <view class="postsForBar">
         <view class="top">
-            <image @click="toDetailUserPage" :src="creater.url" mode="scaleToFill" />
+            <image lazy-load="true"  @click="toDetailUserPage" :src="creater.url" mode="scaleToFill" />
             <view @click="toDetailUserPage" class="user">
                 <text>{{ creater.userName }}</text>
                 <view>
@@ -17,7 +17,7 @@
             <text>{{ tiezi.content }}</text>
         </view>
 
-        <image @click="detailPage" v-if="tiezi.url" :src="tiezi.url" mode="widthFix" />
+        <image lazy-load="true"  @click="detailPage" v-if="tiezi.url" :src="tiezi.url" mode="widthFix" />
 
         <view class="footer">
             <view @click="collection">

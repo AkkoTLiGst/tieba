@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { loginStore } from '@/store/login';
 import postsVue from '@/components/posts.vue'
-import { onPullDownRefresh, onReachBottom } from '@dcloudio/uni-app';
+import { onPullDownRefresh, onReachBottom, onShow } from '@dcloudio/uni-app';
 import { provide, ref, reactive } from 'vue'
 
 const from = 'user';
@@ -33,7 +33,9 @@ const initPosts = () => {
         }
     }
 }
-initPosts();
+onShow(() => {
+    initPosts();
+})
 
 onReachBottom(() => {
     // 每次下拉多显示10个帖子

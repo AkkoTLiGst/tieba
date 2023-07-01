@@ -10,7 +10,7 @@
         <view class="content">
             <view class="ba" v-for="(item, index) in arr" :index="index">
                 <view>
-                    <image :src="`${ENV_VAR.BASE_API}/tiebas/${item.photoTieba}`" />
+                    <image lazy-load="true"  :src="`${ENV_VAR.BASE_API}/tiebas/${item.photoTieba}`" />
                     <text>{{ item.tiebaName }}吧</text>
                 </view>
 

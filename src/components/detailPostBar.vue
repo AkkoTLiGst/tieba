@@ -7,7 +7,7 @@
         <view class="barMsg">
             <view class="left">
                 <canvas canvas-id="logo" />
-                <image :src="tiebaInfo.photoTieba" mode="scaleToFill" />
+                <image lazy-load="true"  :src="tiebaInfo.photoTieba" mode="scaleToFill" />
                 <view class="msg">
                     <text>{{ tiebaInfo.tiebaName }}吧</text>
                     <view>
@@ -50,7 +50,7 @@
     </view>
 </template>
 <script setup lang="ts">
-import { onLoad, onPullDownRefresh, onReachBottom } from '@dcloudio/uni-app';
+import { onLoad, onPullDownRefresh, onReachBottom, onShow } from '@dcloudio/uni-app';
 import { stream, tiebaById } from '@/server/tiebas'
 import { getPostByTieba, getPostCount } from '@/server/tiezi'
 import { isSubscribe, subTieba } from '@/server/login'
@@ -166,9 +166,6 @@ onLoad((e) => {
 
     tiebaId = e!.data as number; // 获取贴吧ID
 
-    initTieba();
-    initTiezi();
-
     // 设置发帖按钮的位置
     setTimeout(() => {
         // 获取页面宽度（非视口宽度）
@@ -181,6 +178,12 @@ onLoad((e) => {
         }).exec();
     }, 1)
 });
+
+onShow(() => {
+    tieziArr.length = 0;
+    initTieba();
+    initTiezi();
+})
 
 
 // 关注贴吧

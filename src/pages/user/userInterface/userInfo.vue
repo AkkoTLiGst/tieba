@@ -2,7 +2,7 @@
     <view class="userInfo">
         <view class="user" >
             
-            <image  @click="toDetailUserPage" class="useravatar" :src="`${user.userInfo.photoUser}`"></image>
+            <image lazy-load="true"   @click="toDetailUserPage" class="useravatar" :src="`${user.userInfo.photoUser}`"></image>
             <view class="username"  @click="toDetailUserPage">
                 <view class="username-top">
                     <text>{{ user.userInfo.userName }}</text>

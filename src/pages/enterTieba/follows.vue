@@ -9,7 +9,7 @@
         <view v-if="followArr.length === 0" class="nofollows">您没有关注的吧</view>
         <view class="content" v-if="followArr.length !== 0">
             <view class="contentItem" v-for="item in num" :index="item" style="height: 50px;" @click="enterPostBar(item)">
-                <image :src="`${ENV_VAR.BASE_API}/tiebas/${followArr[item - 1].photoName}`" mode="scaleToFill" />
+                <image lazy-load="true"  :src="`${ENV_VAR.BASE_API}/tiebas/${followArr[item - 1].photoName}`" mode="scaleToFill" />
                 <view>{{ followArr[item - 1].name }}吧</view>
             </view>
         </view>

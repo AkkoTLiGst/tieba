@@ -2,7 +2,7 @@
     <view class="detailComment">
         <view class="creater" @click="toDetailUserPage">
             <view>
-                <image :src="data.user.photoUser" mode="scaleToFill" />
+                <image lazy-load="true" :src="data.user.photoUser" mode="scaleToFill" />
 
                 <view class="name">
                     <view class="name-top">
@@ -27,7 +27,7 @@
         </view>
         <view class="content">
             <text>{{ data.comment }}</text>
-            <image v-if="data.tieziImg" :src="data.tieziImg" mode="widthFix" />
+            <image lazy-load="true"  v-if="data.tieziImg" :src="data.tieziImg" mode="widthFix" />
         </view>
     </view>
 </template>
