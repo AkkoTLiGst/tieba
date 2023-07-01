@@ -95,11 +95,10 @@ onLoad((e) => {
     statusBarHeight.value = uni.getSystemInfoSync().statusBarHeight as number || 44;
 
     user.id = e!.userId; // 接受用户ID
-
-    init();
 });
 
 onShow(() => {
+    posts.length = 0;
     init();
 })
 

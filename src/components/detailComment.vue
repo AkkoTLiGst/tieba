@@ -1,6 +1,6 @@
 <template>
     <view class="detailComment">
-        <view class="creater">
+        <view class="creater" @click="toDetailUserPage">
             <view>
                 <image :src="data.user.photoUser" mode="scaleToFill" />
 
@@ -64,6 +64,16 @@ onLoad(() => {
 
 // 计算评论发出时间
 data.createTimeTiezi = mathTime(data.createTimeTiezi);
+
+// 跳转到用户详情
+const toDetailUserPage = () => {
+    console.log(data);
+    
+    uni.navigateTo({
+        url: '/components/detailUserPage?userId=' + data.creater,
+        animationType: 'pop-in'
+    })
+}
 </script>
 
 <style scoped lang="scss">
