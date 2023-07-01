@@ -34,6 +34,7 @@ const initPosts = () => {
     }
 }
 onShow(() => {
+    list.length = 0;
     initPosts();
 })
 
