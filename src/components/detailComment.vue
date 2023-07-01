@@ -67,8 +67,6 @@ data.createTimeTiezi = mathTime(data.createTimeTiezi);
 
 // 跳转到用户详情
 const toDetailUserPage = () => {
-    console.log(data);
-    
     uni.navigateTo({
         url: '/components/detailUserPage?userId=' + data.creater,
         animationType: 'pop-in'
