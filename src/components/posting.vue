@@ -71,11 +71,7 @@ const isInput = ref(true);
 
 // 标题输入事件
 const titleEvent = () => {
-    if (post.threadTitle.length >= 5) {
-        isInput.value = false;
-    } else {
-        isInput.value = true;
-    }
+    isInput.value = post.threadTitle.length < 5;
 }
 
 // 发表帖子
@@ -85,12 +81,12 @@ const postingEvent = async () => {
         post.threadTitle = '';
         post.content = '';
 
-        uni.showToast({
+        await uni.showToast({
             title: "发表成功",
             duration: 800
         })
     }else{
-        uni.showToast({
+        await uni.showToast({
             title: "发表失败",
             duration: 800,
             icon: 'fail'
