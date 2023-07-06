@@ -3,7 +3,8 @@ import { names } from '../storeName'
 import { reactive, ref } from 'vue'
 import type { User } from '@/types/types';
 // import { getTokenTiezi, getUser } from '@/server/uniRequest/login';
-import {getTokenTiezi, getUser} from "@/server/axiosRequest/login";
+// @ts-ignore
+import {getTokenTiezi, getUser} from '@/server/axiosRequest/login';
 import ENV_VAR from '@/config/env';
 
 export const loginStore = defineStore(
