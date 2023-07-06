@@ -17,11 +17,11 @@ const request = axios.create({
 request.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     // 判断是否需要token
     const isToken = (config.headers || {}).isToken === false;
-    if (isToken) {
+    if (!isToken) {
         // 如果需要token就获取token，并再请求头携带token
         const token: string | null = uni.getStorageSync('loginKey');
         if (token) {
-            config.headers['Authorization'] = 'Bearer' + token;
+            config.headers['Authorization'] = 'Bearer ' + token;
         }
     }
     return config

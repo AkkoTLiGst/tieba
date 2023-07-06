@@ -7,5 +7,15 @@ export const getUser = () => {
         headers: {
             isToken: true
         }
-    }).then(res => res.data);
+    }).then(res => res);
+}
+
+export const getTokenTiezi = () => {
+    return request({
+        url: 'auth/tokenTiezi',
+        method: "GET",
+        headers: {
+            isToken: true
+        }
+    }).then(res => res);
 }

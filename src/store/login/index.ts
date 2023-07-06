@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 import { names } from '../storeName'
 import { reactive, ref } from 'vue'
 import type { User } from '@/types/types';
-import { getTokenTiezi, getUser } from '@/server/uniRequest/login';
+// import { getTokenTiezi, getUser } from '@/server/uniRequest/login';
+import {getTokenTiezi, getUser} from "@/server/axiosRequest/login";
 import ENV_VAR from '@/config/env';
 
 export const loginStore = defineStore(
@@ -43,7 +44,7 @@ export const loginStore = defineStore(
         // 保存用户信息
         async function setUserInfo() {
             const data = await getUser() as AnyObject;
-            
+
             data.photoUser = ENV_VAR.BASE_API + '/user/' + data.photoUser;
             Object.assign(userInfo, data);
         }
@@ -57,7 +58,7 @@ export const loginStore = defineStore(
 
         // 获取用户的所有帖子的ID
         async function updateTieziID() {
-            const arr: number[] = await getTokenTiezi() as number[];
+            const arr: number[] = await getTokenTiezi() as any;
             userInfo.tiezisID = arr.reverse(); // reverse倒序输出数组
         }
 
