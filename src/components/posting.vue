@@ -38,7 +38,7 @@ import { onLoad } from '@dcloudio/uni-app';
 import { reactive, ref } from 'vue';
 import { rollback, throttle } from '@/hooks';
 import { loginStore } from '@/store/login';
-import { createPost } from '@/server/tiezi';
+import { createPost } from '@/server/uniRequest/tiezi';
 
 // 登录用户
 const userLogin = loginStore();

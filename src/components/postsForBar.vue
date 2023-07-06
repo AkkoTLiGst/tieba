@@ -41,14 +41,14 @@
 </template>
 
 <script setup lang="ts">
-import { getUserById } from '@/server/user';
+import { getUserById } from '@/server/uniRequest/user';
 import type { tiezis, Creater, toDetailPage, tieba } from '@/types/types';
 import { reactive, ref } from 'vue';
 import { mathTime, newUrl } from '@/hooks/index'
 import { loginStore } from '@/store/login';
-import { isLike, likePost } from '@/server/login';
-import { getTieziById } from '@/server/tiezi';
-import { tiebaById } from '@/server/tiebas';
+import { isLike, likePost } from '@/server/uniRequest/login';
+import { getTieziById } from '@/server/uniRequest/tiezi';
+import { tiebaById } from '@/server/uniRequest/tiebas';
 
 // 用户信息
 const user = loginStore();

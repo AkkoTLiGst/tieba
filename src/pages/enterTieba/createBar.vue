@@ -31,7 +31,7 @@ import { ref, reactive } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import { debounce, rollback } from '@/hooks';
 import { watchEffect } from 'vue';
-import { createTieba, tiebaByName } from '@/server/tiebas'
+import { createTieba, tiebaByName } from '@/server/uniRequest/tiebas'
 
 // 贴吧信息
 const createBarInfo = reactive({

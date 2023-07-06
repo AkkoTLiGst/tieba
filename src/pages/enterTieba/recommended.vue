@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import ENV_VAR from '@/config/env';
-import { tiebaById, tiebaCount } from '@/server/tiebas';
+import { tiebaById, tiebaCount } from '@/server/uniRequest/tiebas';
 import { reactive } from 'vue';
 
 const arr = reactive<AnyObject[]>([]);

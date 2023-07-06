@@ -51,9 +51,9 @@
 </template>
 <script setup lang="ts">
 import { onLoad, onPullDownRefresh, onReachBottom, onShow } from '@dcloudio/uni-app';
-import { stream, tiebaById } from '@/server/tiebas'
-import { getPostByTieba, getPostCount } from '@/server/tiezi'
-import { isSubscribe, subTieba } from '@/server/login'
+import { stream, tiebaById } from '@/server/uniRequest/tiebas'
+import { getPostByTieba, getPostCount } from '@/server/uniRequest/tiezi'
+import { isSubscribe, subTieba } from '@/server/uniRequest/login'
 import postsForBar from '@/components/postsForBar.vue'
 import type { tieba, tiezis, toDetailPage } from '@/types/types'
 import { reactive, ref } from 'vue';

@@ -58,7 +58,7 @@
 import { inject } from 'vue';
 import { watchEffect } from 'vue';
 import { reactive, ref } from 'vue';
-import { createUser } from '@/server/user'
+import { createUser } from '@/server/uniRequest/user'
 import { isEmail, isMobile } from '@/hooks';
 
 // 父组件发来是否同意

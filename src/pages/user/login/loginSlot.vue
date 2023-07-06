@@ -52,9 +52,9 @@
 <script setup lang="ts">
 import { loginStore } from '@/store/login';
 import { ref, reactive } from 'vue'
-import { isEmail, isMobile } from '@/hooks/index'
+import { isEmail, isMobile } from '@/hooks'
 import { inject } from 'vue';
-import { login } from '@/server/login';
+import { login } from '@/server/uniRequest/login';
 
 
 
@@ -175,14 +175,14 @@ const loginBtn = async () => {
     
     if (data.token) {
         uni.setStorageSync('loginKey', data.token);
-        user.setUserInfo(); // 用户信息存储到pinia
-        user.setIsLogin(true); // 登录状态为true
+        await user.setUserInfo(); // 用户信息存储到pinia
+        await user.setIsLogin(true); // 登录状态为true
 
-        uni.reLaunch({
+        await uni.reLaunch({
             url: '/pages/user/index'
         });
     } else {
-        uni.showToast({
+        await uni.showToast({
             title: '账号或密码错误',
             icon: 'error',
             duration: 1500
@@ -194,7 +194,7 @@ const loginBtn = async () => {
 <style scoped lang="scss">
 .account {
     padding: 30rpx 40rpx;
-    font-weight: border;
+    font-weight: bolder;
 
     .code {
         font-weight: normal;

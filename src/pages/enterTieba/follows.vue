@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { loginStore } from '@/store/login';
-import { followTieba } from '@/server/login'
+import { followTieba } from '@/server/uniRequest/login'
 import { reactive, ref } from 'vue'
 import { onReachBottom, onShow } from '@dcloudio/uni-app';
 import ENV_VAR from '@/config/env';

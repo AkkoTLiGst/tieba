@@ -2,13 +2,12 @@ import { defineStore } from 'pinia'
 import { names } from '../storeName'
 import { reactive, ref } from 'vue'
 import type { User } from '@/types/types';
-import { getTokenTiezi, getUser } from '@/server/login';
+import { getTokenTiezi, getUser } from '@/server/uniRequest/login';
 import ENV_VAR from '@/config/env';
 
 export const loginStore = defineStore(
     names.Login,
     () => {
-        id: 'login'
         // state
         const isLogin = ref(false); // 是否登陆
 

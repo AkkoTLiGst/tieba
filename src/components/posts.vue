@@ -48,9 +48,9 @@
 </template>
 
 <script setup lang="ts">
-import { tiebaById, tiebaCount } from '@/server/tiebas';
-import { randomTieziTB, getTieziById } from '@/server/tiezi';
-import { isLike, likePost } from '@/server/login'
+import { tiebaById, tiebaCount } from '@/server/uniRequest/tiebas';
+import { randomTieziTB, getTieziById } from '@/server/uniRequest/tiezi';
+import { isLike, likePost } from '@/server/uniRequest/login'
 import { reactive, inject, ref, provide } from 'vue';
 import type { tiezis, toDetailPage } from '@/types/types'
 import { loginStore } from '@/store/login';

@@ -35,11 +35,11 @@ import { onLoad, onShow } from '@dcloudio/uni-app';
 import { ref, reactive } from 'vue';
 import { newUrl, rollback } from '@/hooks';
 import type { User, tieba, tiezis, toDetailPage } from '@/types/types';
-import { getUserById, userPosts } from '@/server/user';
-import { loginUserPosts } from '@/server/login';
+import { getUserById, userPosts } from '@/server/uniRequest/user';
+import { loginUserPosts } from '@/server/uniRequest/login';
 import { loginStore } from '@/store/login';
 import postsForBar from '@/components/postsForBar.vue'
-import { tiebaById } from '@/server/tiebas'
+import { tiebaById } from '@/server/uniRequest/tiebas'
 
 interface newUser extends User {
     aboutMe: string

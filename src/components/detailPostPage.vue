@@ -98,14 +98,14 @@
 </template>
 
 <script setup lang="ts">
-import { getUserById } from '@/server/user';
-import { findAllCommentId, getComment, createComment, uploadImg } from '@/server/comment';
+import { getUserById } from '@/server/uniRequest/user';
+import { findAllCommentId, getComment, createComment, uploadImg } from '@/server/uniRequest/comment';
 import { loginStore } from '@/store/login';
 import type { tiezis, toDetailPage } from '@/types/types';
 import { onLoad, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
 import { ref, reactive, watchEffect } from 'vue'
-import { isLike, likePost } from '@/server/login';
-import { getTieziById } from '@/server/tiezi';
+import { isLike, likePost } from '@/server/uniRequest/login';
+import { getTieziById } from '@/server/uniRequest/tiezi';
 import posts from './posts.vue';
 import detailCommentVue from './detailComment.vue';
 import { rollback, debounce } from '@/hooks';

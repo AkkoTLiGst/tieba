@@ -35,8 +35,8 @@ import { onLoad } from '@dcloudio/uni-app';
 import { newUrl, rollback } from '@/hooks';
 import { loginStore } from '@/store/login';
 import type { User } from '@/types/types';
-import { authUpdateUser } from '@/server/login'
-import { uploadImg, getUserById } from '@/server/user'
+import { authUpdateUser } from '@/server/uniRequest/login'
+import { uploadImg, getUserById } from '@/server/uniRequest/user'
 
 const userLogin = loginStore();
 
