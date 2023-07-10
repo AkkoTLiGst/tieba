@@ -25,7 +25,7 @@
                         size="14" label-size="14" label="同步到主页"></u-checkbox>
                 </u-checkbox-group>
             </view>
-            <view class="photo">
+            <view class="photo" @click="addPhoto">
                 <u-icon size="18" name="photo"></u-icon>
                 <text>添加图片</text>
             </view>
@@ -74,10 +74,32 @@ const titleEvent = () => {
     isInput.value = post.threadTitle.length < 5;
 }
 
+let postImg = '';
+// 添加图片
+const addPhoto = () => {
+    uni.chooseImage({
+        sourceType: ['album', 'camera'],
+        count: 1,
+        success: (chooseImageRes) => {
+            const tempFilePaths = chooseImageRes.tempFilePaths as string[];
+            postImg = tempFilePaths[0];
+        },
+        fail: (error) => { }
+    });
+    
+};
+
 // 发表帖子
 const postingEvent = async () => {
-    const data = await createPost(post) as { message: string, code: number };
-    if (data.code === 200) {
+    const data = await createPost(post, postImg);
+    let temp;
+    if(postImg){
+        temp = JSON.parse(data as string) as {message: string, code: number};
+    }else{
+        temp = data as {message: string, code: number};
+    }
+    
+    if (temp.code === 200) {
         post.threadTitle = '';
         post.content = '';
 
@@ -111,7 +133,7 @@ onLoad((e) => {
 
     post.ctieBaId = tiebaInfo.id;
     post.createrId = userLogin.userInfo.id;
-})
+});
 </script>
 
 <style scoped lang="scss">

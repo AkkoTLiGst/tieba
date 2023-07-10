@@ -1,12 +1,23 @@
 import ENV_CONFIG from '@/config/env';
 // 发表帖子
-export const createPost = (post: object) => {
-    return uni.request({
-        url: `${ENV_CONFIG.BASE_API}/tiezi/create`,
-        method: `POST`,
-        data: { ...post },
-        timeout: 5000
-    }).then(res => res.data);
+export const createPost = (post: object, file: string) => {
+    if (file) {
+        return uni.uploadFile({
+            url: `${ENV_CONFIG.BASE_API}/tiezi/create`,
+            fileType: `image`,
+            filePath: file,
+            name: `file`,
+            formData: { ...post },
+            timeout: 5000
+        }).then(res => res.data);
+    } else {
+        return uni.request({
+            url: `${ENV_CONFIG.BASE_API}/tiezi/create`,
+            method: `POST`,
+            data: { ...post },
+            timeout: 5000
+        }).then(res => res.data);
+    }
 }
 
 // 随机获取帖子
