@@ -15,7 +15,14 @@
             <input type="text" @input="throttle(titleEvent, 500)()" v-model="post.threadTitle"
                 placeholder="请输入完整的帖子标题（5-31个字）" maxlength="31" />
 
-            <textarea maxlength="-1" v-model="post.content" placeholder="来吧，尽情发挥吧"></textarea>
+            <textarea maxlength="-1" v-model="post.content" placeholder="来吧，尽情发挥吧">
+            </textarea>
+            <view v-show="postImg"  class="chooseImg">
+                <image :src="postImg" mode="scaleToFill" />
+                <u-icon @click="postImg = ''" name="close" size="12" :bold="true" color="white"  class="icon"></u-icon>
+            </view>
+
+
         </view>
 
         <view class="bottom">
@@ -74,40 +81,44 @@ const titleEvent = () => {
     isInput.value = post.threadTitle.length < 5;
 }
 
-let postImg = '';
+const postImg = ref('');
 // 添加图片
 const addPhoto = () => {
     uni.chooseImage({
         sourceType: ['album', 'camera'],
+        sizeType: ['compressed'],
         count: 1,
         success: (chooseImageRes) => {
             const tempFilePaths = chooseImageRes.tempFilePaths as string[];
-            postImg = tempFilePaths[0];
+            console.log(tempFilePaths);
+            
+            postImg.value = tempFilePaths[0];
         },
         fail: (error) => { }
     });
-    
+
 };
 
 // 发表帖子
 const postingEvent = async () => {
-    const data = await createPost(post, postImg);
+    const data = await createPost(post, postImg.value);
     let temp;
-    if(postImg){
-        temp = JSON.parse(data as string) as {message: string, code: number};
-    }else{
-        temp = data as {message: string, code: number};
+    if (postImg.value) {
+        temp = JSON.parse(data as string) as { message: string, code: number };
+    } else {
+        temp = data as { message: string, code: number };
     }
-    
+
     if (temp.code === 200) {
         post.threadTitle = '';
         post.content = '';
+        postImg.value = '';
 
         await uni.showToast({
             title: "发表成功",
             duration: 800
         })
-    }else{
+    } else {
         await uni.showToast({
             title: "发表失败",
             duration: 800,
@@ -139,12 +150,15 @@ onLoad((e) => {
 <style scoped lang="scss">
 page {
     background-color: #f7f7f7;
+    overflow: hidden;
 }
 
 .posting {
     background-color: white;
     height: 100vh;
     padding: 0 10px;
+    display: flex;
+    flex-direction: column;
 
     .topBar {
         display: flex;
@@ -168,6 +182,9 @@ page {
 
     .content {
         padding-bottom: 10px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
 
         .tieba {
             display: flex;
@@ -193,12 +210,31 @@ page {
             width: 100%;
             margin-top: 10px;
             font-size: 14px;
-            height: 72vh;
+            flex-grow: 1;
+        }
+
+        .chooseImg{
+            margin-top: 10px;
+            position: relative;
+            width: 120px; height: 120px;
+            image{
+                width: 120px; height: 120px;
+                border-radius: 5px;
+            }
+            .icon{
+                position: absolute;
+                top: 0; 
+                background-color: rgba(black, .5);
+                border-radius: 50%;
+                padding: 5px;
+                right: 5px; top: 5px;
+            }
         }
     }
 
     .bottom {
         display: flex;
+        padding-bottom: 10px;
 
         .photo {
             margin-left: 15px;
