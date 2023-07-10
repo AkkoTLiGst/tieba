@@ -8,8 +8,7 @@
 		{
 			"path": "pages/home/index",
 			"style": {
-				"onReachBottomDistance": 10,
-				"enablePullDownRefresh": true
+				"onReachBottomDistance": 10
 			}
 		},
 		{
@@ -29,8 +28,7 @@
 		{
 			"path": "pages/user/myPosts/index",
 			"style": {
-				"navigationBarTitleText": "我的帖子",
-				"enablePullDownRefresh": true
+				"navigationBarTitleText": "我的帖子"
 			}
 		},
 		{
@@ -42,8 +40,7 @@
 		{
 			"path": "components/detailPostBar",
 			"style": {
-				"navigationStyle": "custom",
-				"enablePullDownRefresh": true
+				"navigationStyle": "custom"
 			}
 		},
 		{
