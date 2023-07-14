@@ -280,7 +280,8 @@ const initDetail = async (getInfo: any) => {
         tiezi.url = `${ENV_VAR.BASE_API}/tiezi/${getTiezi.tieziImg}`;
     }
     tiezi.tiebaName = getInfo.tiebaName;
-    tiezi.tiebaImg = getInfo.tiebaImg;
+    
+    tiezi.tiebaImg = `${ENV_VAR.BASE_API}/tiebas/` + getInfo.tiebaImg;
     tiezi.createTimeTiezi = getInfo.createTime;
 
     // 获取发帖用户信息
