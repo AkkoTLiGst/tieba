@@ -1,10 +1,14 @@
 <template>
     <view class="content">
         <view class="ct-title"><text>登录百度账号 精彩永相随</text></view>
+        <view class="demo">
+            <text>演示账号：noa 密码123</text>
+            <text>也可以注册</text>
+        </view>
 
-        <loginSlot v-if="!isShowRegister"/>
-        <createUser v-if="isShowRegister"/>
-        
+        <loginSlot v-if="!isShowRegister" />
+        <createUser v-if="isShowRegister" />
+
 
         <view class="argeement">
             <view>
@@ -45,10 +49,10 @@ const checkbox = reactive({ name: 'argee', disabled: false });
 // 同意协议事件
 // n为数组，数组内容为点击后选中的checkbox的name
 const checkboxChange = (n: any) => {
-    if(checkbox.name === n[0]){
+    if (checkbox.name === n[0]) {
         isArgee.value = true;
         checkGroupVal[0] = n[0];
-    }else{
+    } else {
         isArgee.value = false;
         checkGroupVal[0] = '';
     }
@@ -78,9 +82,16 @@ provide('checkGroupVal', checkGroupVal);
     position: relative;
 
     .ct-title {
-        padding: 60rpx 0;
+        padding: 60rpx 0 40rpx;
         font-size: 20px;
         text-align: center;
+    }
+    .demo{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 14px;
+        color: rgba($color: #000000, $alpha: .4);
     }
 
     .account {
@@ -107,7 +118,7 @@ provide('checkGroupVal', checkGroupVal);
         }
     }
 
-    .register{
+    .register {
         position: absolute;
         width: 100%;
         text-align: center;
